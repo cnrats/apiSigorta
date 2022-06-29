@@ -33,10 +33,10 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 **/kullanici/giris/(Tamamlandı)**
 - kullaniciAdi, sifre => durum, mesaj, erisimKodu;
 
-**/kullanici/cikis/**
+**/kullanici/cikis/(Tamamlandı)**
 - erisimKodu => durum, mesaj;
 
-**/kullanici/ekle/(Tamamlandı)**
+**/kullanici/ekle/**
 - erisimKodu, kullaniciAdi, sifre, firmalarDuzenle, musterilerDuzenle, arsivKlasorleriDuzenle, branslarDuzenle, sigortaSirketleriDuzenle, bireyselIslerDuzenle, ortakIslerDuzenle, alacaklarDuzenle, verilenlerDuzenle, kullanicilarDuzenle, kayitlarGoruntule => durum, mesaj, kullaniciId;\
 
 **/kullanici/sil/**
