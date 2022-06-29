@@ -30,10 +30,10 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 
 ## Api Kullanım Kılavuzu
 ### Kullanıcı Denetimi
-**/kullanici/giris/(Tamamlandı)**
+**/kullanici/giris/ (Tamamlandı)**
 - kullaniciAdi, sifre => durum, mesaj, erisimKodu;
 
-**/kullanici/cikis/(Tamamlandı)**
+**/kullanici/cikis/ (Tamamlandı)**
 - erisimKodu => durum, mesaj;
 
 **/kullanici/ekle/**
