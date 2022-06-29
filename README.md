@@ -30,16 +30,16 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 
 ## Api Kullanım Kılavuzu
 ### Kullanıcı Denetimi
-**/kullanici/giris/(Tamamlandı)** \
+**/kullanici/giris/(Tamamlandı)**
 kullaniciAdi, sifre => durum, mesaj, erisimKodu;\
-**/kullanici/cikis/**\
+**/kullanici/cikis/**
 erisimKodu => durum, mesaj;\
-**/kullanici/ekle/(Tamamlandı)** \  
+**/kullanici/ekle/(Tamamlandı)**  
 erisimKodu, kullaniciAdi, sifre, firmalarDuzenle, musterilerDuzenle, arsivKlasorleriDuzenle, branslarDuzenle, sigortaSirketleriDuzenle, bireyselIslerDuzenle, ortakIslerDuzenle, alacaklarDuzenle, verilenlerDuzenle, kullanicilarDuzenle, kayitlarGoruntule => durum, mesaj, kullaniciId;\
-**/kullanici/sil/** \
+**/kullanici/sil/**
 erisimKodu, kullaniciId => durum, mesaj;\
-**/kullanici/goruntule/** \  
+**/kullanici/goruntule/**  
 erisimKodu => durum, mesaj, id, kullaniciAdi; (Tüm kullanıcılar.)\
 erisimKodu, kullaniciId => durum, mesaj, id, kullaniciAdi, firmalarDuzenle, musterilerDuzenle, arsivKlasorleriDuzenle, branslarDuzenle, sigortaSirketleriDuzenle, bireyselIslerDuzenle, ortakIslerDuzenle, alacaklarDuzenle, verilenlerDuzenle, kullanicilarDuzenle, kayitlarGoruntule; (Tek kullanıcı.)\
-**/kullanici/guncelle/** \ 
+**/kullanici/guncelle/**
 erisim-kodu, kullaniciId, kullaniciAdi, sifre, firmalarDuzenle, musterilerDuzenle, arsivKlasorleriDuzenle, branslarDuzenle, sigortaSirketleriDuzenle, bireyselIslerDuzenle, ortakIslerDuzenle, alacaklarDuzenle, verilenlerDuzenle, kullanicilarDuzenle, kayitlarGoruntule => durum, mesaj;
