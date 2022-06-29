@@ -15,8 +15,8 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 - arsivKlasorleriDuzenle (bool)
 - branslarDuzenle (bool)
 - sigortaSirketleriDuzenle (bool)
-- bireyselIsleriDuzenle (bool)
-- ortakIsleriDuzenle (bool)
+- bireyselIslerDuzenle (bool)
+- ortakIslerDuzenle (bool)
 - alacaklarDuzenle (bool)
 - verilenlerDuzenle (bool)
 - kullanicilarDuzenle (bool)
@@ -36,15 +36,17 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 **/kullanici/cikis/ (Tamamlandı)**
 - erisimKodu => durum, mesaj;
 
-**/kullanici/ekle/**
+**/kullanici/ekle/ (Tamamlandı)**
 - erisimKodu, kullaniciAdi, sifre, firmalarDuzenle, musterilerDuzenle, arsivKlasorleriDuzenle, branslarDuzenle, sigortaSirketleriDuzenle, bireyselIslerDuzenle, ortakIslerDuzenle, alacaklarDuzenle, verilenlerDuzenle, kullanicilarDuzenle, kayitlarGoruntule => durum, mesaj, kullaniciId;\
 
-**/kullanici/sil/**
+**/kullanici/sil/ (Tamamlandı)**
 - erisimKodu, kullaniciId => durum, mesaj;\
 
-**/kullanici/goruntule/**
+**/kullanici/goruntule/hepsi (Tamamlandı)**
 - erisimKodu => durum, mesaj, id, kullaniciAdi; (Tüm kullanıcılar.)\
+
+**/kullanici/goruntule/tek (Tamamlandı)**
 - erisimKodu, kullaniciId => durum, mesaj, id, kullaniciAdi, firmalarDuzenle, musterilerDuzenle, arsivKlasorleriDuzenle, branslarDuzenle, sigortaSirketleriDuzenle, bireyselIslerDuzenle, ortakIslerDuzenle, alacaklarDuzenle, verilenlerDuzenle, kullanicilarDuzenle, kayitlarGoruntule; (Tek kullanıcı.)\
 
-**/kullanici/guncelle/**
-- erisim-kodu, kullaniciId, kullaniciAdi, sifre, firmalarDuzenle, musterilerDuzenle, arsivKlasorleriDuzenle, branslarDuzenle, sigortaSirketleriDuzenle, bireyselIslerDuzenle, ortakIslerDuzenle, alacaklarDuzenle, verilenlerDuzenle, kullanicilarDuzenle, kayitlarGoruntule => durum, mesaj;
+**/kullanici/guncelle/ (Tamamlandı)**
+- erisim-kodu, kullaniciId, sifre, firmalarDuzenle, musterilerDuzenle, arsivKlasorleriDuzenle, branslarDuzenle, sigortaSirketleriDuzenle, bireyselIslerDuzenle, ortakIslerDuzenle, alacaklarDuzenle, verilenlerDuzenle, kullanicilarDuzenle, kayitlarGoruntule => durum, mesaj;
