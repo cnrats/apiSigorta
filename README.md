@@ -30,7 +30,11 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 
 **firmalar**
 - id (int)
-- ad
+- ad (text)
+
+**arsivKlasorleri**
+- id (int)
+- ad (text)
 
 ## Api Kullanım Kılavuzu
 ### Kullanıcı Denetimi
@@ -66,3 +70,15 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 
 **/firma/sil/ (Tamamlandi)**
 - erisimKodu, firmaId => durum, mesaj;
+
+**/arsiv/ekle/ (Tamamlandi)**
+- erisimKodu, arsivKlasoruAdi => durum, mesaj, arsivKlasoruId;
+
+**/arsiv/goster/hepsi (Tamamlandi)**
+- erisimKodu => durum, mesaj, arsivKlasoruId, arsivKlasoruAdi;
+
+**/arsiv/guncelle/ (Tamamlandi)**
+- erisimKodu, arsivKlasoruId, arsivKlasoruAdi => durum, mesaj;
+
+**/arsiv/sil/ (Tamamlandi)**
+- erisimKodu, arsivKlasoruId => durum, mesaj;

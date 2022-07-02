@@ -320,6 +320,7 @@ def firmaGosterHepsi():
 def firmaGuncelle():
     erisimKodu = request.form["erisimKodu"]
     firmaAdi = request.form["firmaAdi"]
+    firmaId = request.form["firmaId"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -332,7 +333,7 @@ def firmaGuncelle():
                 veriler["durum"] = False
                 veriler["mesaj"] = "Firma adi baska bir firma tarafindan kullanilmakta!"
             else:
-                im.execute("""UPDATE firmalar SET ad = '%s'"""%(firmaAdi))
+                im.execute("""UPDATE firmalar SET ad = '%s' WHERE id='%s'"""%(firmaAdi, firmaId))
                 get_db().commit()
                 veriler["durum"] = True
                 veriler["mesaj"] = "Basarili sekilde firma guncellendi!"
@@ -367,6 +368,119 @@ def firmaSil():
         else:
             veriler["durum"] = False
             veriler["mesaj"] = "Firma silmek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
+
+@app.route('/arsiv/ekle/', methods = ["POST"])
+def arsivKlasoruEkle():
+    erisimKodu = request.form["erisimKodu"]
+    arsivKlasoruAdi = request.form["arsivKlasoruAdi"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "arsivKlasorleriDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM arsivKlasorleri WHERE ad = '%s'"""%(arsivKlasoruAdi))
+            if(im.fetchone()):
+                veriler["durum"] = False
+                veriler["mesaj"] = "Arsiv klasoru adi baska bir klasor tarafindan kullanilmakta!"
+            else:
+                im.execute("""INSERT INTO arsivKlasorleri (ad) VALUES ('%s')"""%(arsivKlasoruAdi))
+                get_db().commit()
+                im.execute("""SELECT id FROM arsivKlasorleri WHERE ad = '%s'"""%(arsivKlasoruAdi))
+                arsivKlasoruId = im.fetchone()
+                veriler["durum"] = True
+                veriler["mesaj"] = "Basarili sekilde klasor eklendi!"
+                veriler["arsivKlasoruId"] = arsivKlasoruId
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Klasor eklemek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
+
+@app.route('/arsiv/goster/hepsi/', methods = ['POST'])
+def arsivGosterHepsi():
+    erisimKodu = request.form["erisimKodu"]
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+
+    if(kid):
+        yetki = yetkiKontrol(kid, "arsivKlasorleriDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM arsivKlasorleri""")
+            veriler = im.fetchall()
+            veri = {}
+            veri["durum"] = True
+            veri["mesaj"] = "Islem basarili!"
+            veriler.insert(0, veri)
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Bu islem icin yetkiniz yok!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+
+    return jsonify(veriler)
+
+@app.route('/arsiv/guncelle/', methods = ["POST"])
+def arsivGuncelle():
+    erisimKodu = request.form["erisimKodu"]
+    arsivKlasoruId = request.form["arsivKlasoruId"]
+    arsivKlasoruAdi = request.form["arsivKlasoruAdi"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "arsivKlasorleriDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM arsivKlasorleri WHERE ad = '%s'"""%(arsivKlasoruAdi))
+            if(im.fetchone()):
+                veriler["durum"] = False
+                veriler["mesaj"] = "Klasor adi baska bir klasor tarafindan kullanilmakta!"
+            else:
+                im.execute("""UPDATE arsivKlasorleri SET ad = '%s' WHERE id= '%s'"""%(arsivKlasoruAdi, arsivKlasoruId))
+                get_db().commit()
+                veriler["durum"] = True
+                veriler["mesaj"] = "Basarili sekilde klasor guncellendi!"
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Klasor guncellemek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
+
+@app.route('/arsiv/sil/', methods = ["POST"])
+def arsivSil():
+    erisimKodu = request.form["erisimKodu"]
+    arsivKlasoruId = request.form["arsivKlasoruId"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "arsivKlasorleriDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM arsivKlasorleri WHERE id = '%s'"""%(arsivKlasoruId))
+            if(not im.fetchone()):
+                veriler["durum"] = False
+                veriler["mesaj"] = "Klasor bulunamadi!"
+            else:
+                im.execute("""DELETE FROM arsivKlasorleri WHERE id = '%s'"""%(arsivKlasoruId))
+                get_db().commit()
+                veriler["durum"] = True
+                veriler["mesaj"] = "Basarili sekilde klasor silindi!"
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Klasor silmek icin yetkiniz bulunmuyor!"
     else:
         veriler["durum"] = False
         veriler["mesaj"] = "Oturum gecersiz!"
