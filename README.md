@@ -36,6 +36,10 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 - id (int)
 - ad (text)
 
+**branslar**
+- id (int)
+- ad (text)
+
 ## Api Kullanım Kılavuzu
 ### Kullanıcı Denetimi
 **/kullanici/giris/ (Tamamlandı)**
@@ -50,10 +54,10 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 **/kullanici/sil/ (Tamamlandı)**
 - erisimKodu, kullaniciId => durum, mesaj;\
 
-**/kullanici/goruntule/hepsi (Tamamlandı)**
+**/kullanici/goster/hepsi/ (Tamamlandı)**
 - erisimKodu => durum, mesaj, id, kullaniciAdi; (Tüm kullanıcılar.)\
 
-**/kullanici/goruntule/tek (Tamamlandı)**
+**/kullanici/goster/tek/ (Tamamlandı)**
 - erisimKodu, kullaniciId => durum, mesaj, id, kullaniciAdi, firmalarDuzenle, musterilerDuzenle, arsivKlasorleriDuzenle, branslarDuzenle, sigortaSirketleriDuzenle, bireyselIslerDuzenle, ortakIslerDuzenle, alacaklarDuzenle, verilenlerDuzenle, kullanicilarDuzenle, kayitlarGoruntule; (Tek kullanıcı.)\
 
 **/kullanici/guncelle/ (Tamamlandı)**
@@ -82,3 +86,15 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 
 **/arsiv/sil/ (Tamamlandi)**
 - erisimKodu, arsivKlasoruId => durum, mesaj;
+
+**/brans/ekle/ (Tamamlandi)**
+- erisimKodu, bransAdi => durum, mesaj, bransId;
+
+**/brans/goster/hepsi (Tamamlandi)**
+- erisimKodu => durum, mesaj, bransId, bransAdi;
+
+**/brans/guncelle/ (Tamamlandi)**
+- erisimKodu, brandId, bransAdi => durum, mesaj;
+
+**/brans/sil/ (Tamamlandi)**
+- erisimKodu, bransId => durum, mesaj;

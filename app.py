@@ -127,7 +127,7 @@ def kullaniciEkle():
                 get_db().commit()
                 veriler["durum"] = True
                 veriler["mesaj"] = "Basarili sekilde kullanici eklendi!"
-                veriler["kullaniciId"] = kullaniciId
+                veriler["kullaniciId"] = kullaniciId["id"]
         else:
             veriler["durum"] = False
             veriler["mesaj"] = "Kullanici eklemek icin yetkiniz bulunmuyor!"
@@ -167,8 +167,8 @@ def kullaniciSil():
 
     return jsonify(veriler)
 
-@app.route('/kullanici/goruntule/hepsi/', methods = ['POST'])
-def kullaniciGoruntuleHepsi():
+@app.route('/kullanici/goster/hepsi/', methods = ['POST'])
+def kullaniciGosterHepsi():
     erisimKodu = request.form["erisimKodu"]
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -192,8 +192,8 @@ def kullaniciGoruntuleHepsi():
 
     return jsonify(veriler)
 
-@app.route('/kullanici/goruntule/tek/', methods = ['POST'])
-def kullaniciGoruntuleTek():
+@app.route('/kullanici/goster/tek/', methods = ['POST'])
+def kullaniciGosterTek():
     erisimKodu = request.form["erisimKodu"]
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -282,7 +282,7 @@ def firmaEkle():
                 firmaId = im.fetchone()
                 veriler["durum"] = True
                 veriler["mesaj"] = "Basarili sekilde firma eklendi!"
-                veriler["firmaId"] = firmaId
+                veriler["firmaId"] = firmaId["id"]
         else:
             veriler["durum"] = False
             veriler["mesaj"] = "Firma eklemek icin yetkiniz bulunmuyor!"
@@ -395,7 +395,7 @@ def arsivKlasoruEkle():
                 arsivKlasoruId = im.fetchone()
                 veriler["durum"] = True
                 veriler["mesaj"] = "Basarili sekilde klasor eklendi!"
-                veriler["arsivKlasoruId"] = arsivKlasoruId
+                veriler["arsivKlasoruId"] = arsivKlasoruId["id"]
         else:
             veriler["durum"] = False
             veriler["mesaj"] = "Klasor eklemek icin yetkiniz bulunmuyor!"
@@ -481,6 +481,119 @@ def arsivSil():
         else:
             veriler["durum"] = False
             veriler["mesaj"] = "Klasor silmek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
+
+@app.route('/brans/ekle/', methods = ["POST"])
+def bransEkle():
+    erisimKodu = request.form["erisimKodu"]
+    bransAdi = request.form["bransAdi"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "branslarDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM branslar WHERE ad = '%s'"""%(bransAdi))
+            if(im.fetchone()):
+                veriler["durum"] = False
+                veriler["mesaj"] = "Brans adi baska bir brans tarafindan kullanilmakta!"
+            else:
+                im.execute("""INSERT INTO branslar (ad) VALUES ('%s')"""%(bransAdi))
+                get_db().commit()
+                im.execute("""SELECT id FROM branslar WHERE ad = '%s'"""%(bransAdi))
+                bransId = im.fetchone()
+                veriler["durum"] = True
+                veriler["mesaj"] = "Basarili sekilde brans eklendi!"
+                veriler["bransId"] = bransId["id"]
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Brans eklemek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
+
+@app.route('/brans/goster/hepsi/', methods = ['POST'])
+def bransGosterHepsi():
+    erisimKodu = request.form["erisimKodu"]
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+
+    if(kid):
+        yetki = yetkiKontrol(kid, "branslarDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM branslar""")
+            veriler = im.fetchall()
+            veri = {}
+            veri["durum"] = True
+            veri["mesaj"] = "Islem basarili!"
+            veriler.insert(0, veri)
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Bu islem icin yetkiniz yok!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+
+    return jsonify(veriler)
+
+@app.route('/brans/guncelle/', methods = ["POST"])
+def bransGuncelle():
+    erisimKodu = request.form["erisimKodu"]
+    bransId = request.form["bransId"]
+    bransAdi = request.form["bransAdi"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "branslarDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM branslar WHERE ad = '%s'"""%(bransAdi))
+            if(im.fetchone()):
+                veriler["durum"] = False
+                veriler["mesaj"] = "Brans adi baska bir klasor tarafindan kullanilmakta!"
+            else:
+                im.execute("""UPDATE branslar SET ad = '%s' WHERE id= '%s'"""%(bransAdi, bransId))
+                get_db().commit()
+                veriler["durum"] = True
+                veriler["mesaj"] = "Basarili sekilde brans guncellendi!"
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "brans guncellemek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
+
+@app.route('/brans/sil/', methods = ["POST"])
+def bransSil():
+    erisimKodu = request.form["erisimKodu"]
+    bransId = request.form["bransId"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "branslarDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM branslar WHERE id = '%s'"""%(bransId))
+            if(not im.fetchone()):
+                veriler["durum"] = False
+                veriler["mesaj"] = "Brans bulunamadi!"
+            else:
+                im.execute("""DELETE FROM branslar WHERE id = '%s'"""%(bransId))
+                get_db().commit()
+                veriler["durum"] = True
+                veriler["mesaj"] = "Basarili sekilde brans silindi!"
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Brans silmek icin yetkiniz bulunmuyor!"
     else:
         veriler["durum"] = False
         veriler["mesaj"] = "Oturum gecersiz!"
