@@ -260,6 +260,118 @@ def kullaniciGuncelle():
         veriler["mesaj"] = "Oturum gecersiz!"
     return jsonify(veriler)
 
+@app.route('/firma/ekle/', methods = ["POST"])
+def firmaEkle():
+    erisimKodu = request.form["erisimKodu"]
+    firmaAdi = request.form["firmaAdi"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "firmalarDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM firmalar WHERE ad = '%s'"""%(firmaAdi))
+            if(im.fetchone()):
+                veriler["durum"] = False
+                veriler["mesaj"] = "Firma adi baska bir firma tarafindan kullanilmakta!"
+            else:
+                im.execute("""INSERT INTO firmalar (ad) VALUES ('%s')"""%(firmaAdi))
+                get_db().commit()
+                im.execute("""SELECT id FROM firmalar WHERE ad = '%s'"""%(firmaAdi))
+                firmaId = im.fetchone()
+                veriler["durum"] = True
+                veriler["mesaj"] = "Basarili sekilde firma eklendi!"
+                veriler["firmaId"] = firmaId
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Firma eklemek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
+
+@app.route('/firma/goster/hepsi/', methods = ['POST'])
+def firmaGosterHepsi():
+    erisimKodu = request.form["erisimKodu"]
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+
+    if(kid):
+        yetki = yetkiKontrol(kid, "firmalarDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM firmalar""")
+            veriler = im.fetchall()
+            veri = {}
+            veri["durum"] = True
+            veri["mesaj"] = "Islem basarili!"
+            veriler.insert(0, veri)
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Bu islem icin yetkiniz yok!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+
+    return jsonify(veriler)
+
+@app.route('/firma/guncelle/', methods = ["POST"])
+def firmaGuncelle():
+    erisimKodu = request.form["erisimKodu"]
+    firmaAdi = request.form["firmaAdi"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "firmalarDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM firmalar WHERE ad = '%s'"""%(firmaAdi))
+            if(im.fetchone()):
+                veriler["durum"] = False
+                veriler["mesaj"] = "Firma adi baska bir firma tarafindan kullanilmakta!"
+            else:
+                im.execute("""UPDATE firmalar SET ad = '%s'"""%(firmaAdi))
+                get_db().commit()
+                veriler["durum"] = True
+                veriler["mesaj"] = "Basarili sekilde firma guncellendi!"
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Firma guncellemek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
+
+@app.route('/firma/sil/', methods = ["POST"])
+def firmaSil():
+    erisimKodu = request.form["erisimKodu"]
+    firmaId = request.form["firmaId"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "firmalarDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM firmalar WHERE id = '%s'"""%(firmaId))
+            if(not im.fetchone()):
+                veriler["durum"] = False
+                veriler["mesaj"] = "Firma bulunamadi!"
+            else:
+                im.execute("""DELETE FROM firmalar WHERE id = '%s'"""%(firmaId))
+                get_db().commit()
+                veriler["durum"] = True
+                veriler["mesaj"] = "Basarili sekilde firma silindi!"
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Firma silmek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
+
 
 
 app.run()

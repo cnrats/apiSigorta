@@ -28,6 +28,10 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 - erisimKodu (text)
 - bitisTarihi (text)
 
+**firmalar**
+- id (int)
+- ad
+
 ## Api Kullanım Kılavuzu
 ### Kullanıcı Denetimi
 **/kullanici/giris/ (Tamamlandı)**
@@ -49,4 +53,16 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 - erisimKodu, kullaniciId => durum, mesaj, id, kullaniciAdi, firmalarDuzenle, musterilerDuzenle, arsivKlasorleriDuzenle, branslarDuzenle, sigortaSirketleriDuzenle, bireyselIslerDuzenle, ortakIslerDuzenle, alacaklarDuzenle, verilenlerDuzenle, kullanicilarDuzenle, kayitlarGoruntule; (Tek kullanıcı.)\
 
 **/kullanici/guncelle/ (Tamamlandı)**
-- erisim-kodu, kullaniciId, sifre, firmalarDuzenle, musterilerDuzenle, arsivKlasorleriDuzenle, branslarDuzenle, sigortaSirketleriDuzenle, bireyselIslerDuzenle, ortakIslerDuzenle, alacaklarDuzenle, verilenlerDuzenle, kullanicilarDuzenle, kayitlarGoruntule => durum, mesaj;
+- erisimKodu, kullaniciId, sifre, firmalarDuzenle, musterilerDuzenle, arsivKlasorleriDuzenle, branslarDuzenle, sigortaSirketleriDuzenle, bireyselIslerDuzenle, ortakIslerDuzenle, alacaklarDuzenle, verilenlerDuzenle, kullanicilarDuzenle, kayitlarGoruntule => durum, mesaj;
+
+**/firma/ekle/ (Tamamlandi)**
+- erisimKodu, firmaAdi => durum, mesaj, firmaId;
+
+**/firma/goster/hepsi (Tamamlandi)**
+- erisimKodu => durum, mesaj, firmaId, firmaAdi;
+
+**/firma/guncelle/ (Tamamlandi)**
+- erisimKodu, firmaId, firmaAdi => durum, mesaj;
+
+**/firma/sil/ (Tamamlandi)**
+- erisimKodu, firmaId => durum, mesaj;
