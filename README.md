@@ -65,6 +65,20 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 - policeNo (text)
 - policeBitisTarihi (text)
 
+**islerOrtak**
+- id (int)
+- musteriId (int)
+- bransId (int)
+- sigortaSirketiId (int)
+- arsivId (int)
+- firmaId (int)
+- komisyonOraniKendisi (int)
+- komisyonOraniFirma (int)
+- plaka (text)
+- ruhsatSeriNo (text)
+- policeNo (text)
+- policeBitisTarihi (text)
+
 ## Api Kullanım Kılavuzu
 ### Kullanıcı Denetimi
 **/kullanici/giris/ (Tamamlandı)**
@@ -164,4 +178,22 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 - erisimKodu, isId, musteriId, bransId, sigortaSirketiId, arsivId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi => durum, mesaj;
 
 **/is/bireysel/sil/**
+- erisimKodu, isId => durum, mesaj;
+
+**/is/ortak/ekle/**
+- erisimKodu, musteriId, bransId, sigortaSirketiId, arsivId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi => durum, mesaj, isId;
+
+**/is/ortak/goster/hepsi/**
+- erisimKodu => durum, mesaj, musteriId, bransId, sigortaSirketiId, arsivId, plaka, firmaId, komisyonOraniKendisi, komisyonOraniFirma, ruhsatSeriNo, policeNo, policeBitisTarihi;
+
+**/is/ortak/musteri/goster/hepsi/**
+- erisimKodu, musteriId => durum, mesaj, bransId, sigortaSirketiId, arsivId, firmaId, komisyonOraniKendisi, komisyonOraniFirma, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi;
+
+**/is/ortak/firma/goster/hepsi/**
+- erisimKodu, firmaId => durum, mesaj, bransId, sigortaSirketiId, arsivId, musteriId, komisyonOraniKendisi, komisyonOraniFirma, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi;
+
+**/is/firma/guncelle/**
+- erisimKodu, isId, musteriId, bransId, sigortaSirketiId, arsivId, firmaId, komisyonOraniKendisi, komisyonOraniFirma, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi => durum, mesaj;
+
+**/is/ortak/sil/**
 - erisimKodu, isId => durum, mesaj;
