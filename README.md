@@ -192,7 +192,7 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 **/is/ortak/firma/goster/hepsi/**
 - erisimKodu, firmaId => durum, mesaj, bransId, sigortaSirketiId, arsivId, musteriId, komisyonOraniKendisi, komisyonOraniFirma, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi;
 
-**/is/firma/guncelle/**
+**/is/ortak/guncelle/**
 - erisimKodu, isId, musteriId, bransId, sigortaSirketiId, arsivId, firmaId, komisyonOraniKendisi, komisyonOraniFirma, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi => durum, mesaj;
 
 **/is/ortak/sil/**
