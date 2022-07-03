@@ -759,5 +759,157 @@ def sirketSil():
         veriler["mesaj"] = "Oturum gecersiz!"
     return jsonify(veriler)
 
+@app.route('/musteri/ekle/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
+def musteriEkle():
+    erisimKodu = request.form["erisimKodu"]
+    musteriAdi = request.form["musteriAdi"]
+    musteriSoyadi = request.form["musteriSoyadi"]
+    musteriTc = request.form["musteriTc"]
+    musteriDogumTarihi = request.form["musteriDogumTarihi"]
+    musteriTelefon = request.form["musteriTelefon"]
+    musteriMailAdresi = request.form["musteriMailAdresi"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "musterilerDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM musteriler WHERE tc = '%s'"""%(musteriTc))
+            if(im.fetchone()):
+                veriler["durum"] = False
+                veriler["mesaj"] = "Musteri Tc baska bir musteri tarafindan kullanilmakta!"
+            else:
+                im.execute("""INSERT INTO musteriler (ad, soyad, tc, dogumTarihi, telefon, mailAdresi) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')"""%(musteriAdi, musteriSoyadi, musteriTc, musteriDogumTarihi, musteriTelefon, musteriMailAdresi))
+                get_db().commit()
+                im.execute("""SELECT id FROM musteriler WHERE tc = '%s'"""%(musteriTc))
+                musteriId = im.fetchone()
+                veriler["durum"] = True
+                veriler["mesaj"] = "Basarili sekilde musteri eklendi!"
+                veriler["musteriId"] = musteriId["id"]
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Musteri eklemek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
+
+@app.route('/musteri/goster/hepsi/', methods = ['POST'])
+@cross_origin(supports_credentials = True)
+def musteriGosterHepsi():
+    erisimKodu = request.form["erisimKodu"]
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+
+    if(kid):
+        yetki = yetkiKontrol(kid, "musterilerDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT id, ad, soyad, telefon, tc FROM musteriler""")
+            veriler = im.fetchall()
+            veri = {}
+            veri["durum"] = True
+            veri["mesaj"] = "Islem basarili!"
+            veriler.insert(0, veri)
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Bu islem icin yetkiniz yok!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+
+    return jsonify(veriler)
+
+@app.route('/musteri/goster/tek/', methods = ['POST'])
+@cross_origin(supports_credentials = True)
+def musteriGosterTek():
+    erisimKodu = request.form["erisimKodu"]
+    musteriId = request.form["musteriId"]
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+
+    if(kid):
+        yetki = yetkiKontrol(kid, "musterilerDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM musteriler WHERE id = '%s'"""%(musteriId))
+            veriler = im.fetchone()
+            veriler["durum"] = True
+            veriler["mesaj"] = "Islem basarili!"
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Bu islem icin yetkiniz yok!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+
+    return jsonify(veriler)
+
+@app.route('/musteri/guncelle/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
+def musteriGuncelle():
+    erisimKodu = request.form["erisimKodu"]
+    musteriId = request.form["musteriId"]
+    musteriAdi = request.form["musteriAdi"]
+    musteriSoyadi = request.form["musteriSoyadi"]
+    musteriTc = request.form["musteriTc"]
+    musteriDogumTarihi = request.form["musteriDogumTarihi"]
+    musteriTelefon = request.form["musteriTelefon"]
+    musteriMailAdresi = request.form["musteriMailAdresi"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "musterilerDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM musteriler WHERE id = '%s'"""%(musteriId))
+            if(not im.fetchone()):
+                veriler["durum"] = False
+                veriler["mesaj"] = "Musteri bulunamadi!"
+            else:
+                im.execute("""UPDATE musteriler SET ad = '%s', soyad = '%s', tc = '%s', dogumTarihi = '%s', telefon = '%s', mailAdresi = '%s' WHERE id= '%s'"""%(musteriAdi, musteriSoyadi, musteriTc, musteriDogumTarihi, musteriTelefon, musteriMailAdresi, musteriId))
+                get_db().commit()
+                veriler["durum"] = True
+                veriler["mesaj"] = "Basarili sekilde musteri guncellendi!"
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Musteri guncellemek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
+
+@app.route('/musteri/sil/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
+def musteriSil():
+    erisimKodu = request.form["erisimKodu"]
+    musteriId = request.form["musteriId"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "musterilerDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM musteriler WHERE id = '%s'"""%(musteriId))
+            if(not im.fetchone()):
+                veriler["durum"] = False
+                veriler["mesaj"] = "Musteri bulunamadi!"
+            else:
+                im.execute("""DELETE FROM musteriler WHERE id = '%s'"""%(musteriId))
+                get_db().commit()
+                veriler["durum"] = True
+                veriler["mesaj"] = "Basarili sekilde musteri silindi!"
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Musteri silmek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
+
 
 app.run()

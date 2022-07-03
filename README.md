@@ -45,6 +45,15 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 - ad (text)
 - fotografYolu (text)
 
+**musteriler**
+- id (int)
+- ad (text)
+- soyad (text)
+- tc (text)
+- dogumTarihi (text)
+- telefon (text)
+- mailAdresi (text)
+
 ## Api Kullanım Kılavuzu
 ### Kullanıcı Denetimi
 **/kullanici/giris/ (Tamamlandı)**
@@ -107,7 +116,7 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 **/sirket/ekle/ (Tamamlandi)**
 - erisimKodu, sigortaSirketiAdi, fotografYolu => durum, mesaj, sigortaSirketiId;
 
-**/sirket/goster/hepsi (Tamamlandi)**
+**/sirket/goster/hepsi/ (Tamamlandi)**
 - erisimKodu => durum, mesaj, sigortaSirketiId, sigortaSirketiAdi, fotografYolu;
 
 **/sirket/guncelle/ (Tamamlandi)**
@@ -115,3 +124,18 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 
 **/sirket/sil/ (Tamamlandi)**
 - erisimKodu, sigortaSirketiId => durum, mesaj;
+
+**/musteri/ekle/ (Tamamlandi)**
+- erisimKodu, musteriAdi, musteriSoyadi, musteriTc, musteriDogumTarihi, musteriTelefon, musteriMailAdresi => durum, mesaj, musteriId;
+
+**/musteri/goster/hepsi/ (Tamamlandi)**
+- erisimKodu => durum, mesaj, musteriId, musteriAdi, musteriSoyadi, musteriTelefon, musteriTc;
+
+**/musteri/goster/tek/ (Tamamlandi)**
+- erisimKodu => durum, mesaj, musteriId,musteriAdi, musteriSoyadi, musteriTc, musteriDogumTarihi, musteriTelefon, musteriMailAdresi;
+
+**/musteri/guncelle/ (Tamamlandi)**
+- erisimKodu, musteriId,musteriAdi, musteriSoyadi, musteriTc, musteriDogumTarihi, musteriTelefon, musteriMailAdresi => durum, mesaj;
+
+**/musteri/sil/ (Tamamlandi)**
+- erisimKodu, musteriId => durum, mesaj;
