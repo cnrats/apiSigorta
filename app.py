@@ -911,5 +911,155 @@ def musteriSil():
         veriler["mesaj"] = "Oturum gecersiz!"
     return jsonify(veriler)
 
+@app.route('/is/bireysel/ekle/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
+def isBireyselEkle():
+    erisimKodu = request.form["erisimKodu"]
+    musteriId = request.form["musteriId"]
+    bransId = request.form["bransId"]
+    sigortaSirketiId = request.form["sigortaSirketiId"]
+    arsivId = request.form["arsivId"]
+    plaka = request.form["plaka"]
+    ruhsatSeriNo = request.form["ruhsatSeriNo"]
+    policeNo = request.form["policeNo"]
+    policeBitisTarihi = request.form["policeBitisTarihi"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "bireyselIslerDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""INSERT INTO islerBireysel (musteriId, bransId, sigortaSirketiId, arsivId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')"""%(musteriId, bransId, sigortaSirketiId, arsivId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi))
+            get_db().commit()
+            veriler["durum"] = True
+            veriler["mesaj"] = "Basarili sekilde is eklendi!"
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Is eklemek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
+
+@app.route('/is/bireysel/goster/hepsi/', methods = ['POST'])
+@cross_origin(supports_credentials = True)
+def isBireyselGosterHepsi():
+    erisimKodu = request.form["erisimKodu"]
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+
+    if(kid):
+        yetki = yetkiKontrol(kid, "bireyselIslerDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM islerBireysel""")
+            veriler = im.fetchall()
+            veri = {}
+            veri["durum"] = True
+            veri["mesaj"] = "Islem basarili!"
+            veriler.insert(0, veri)
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Bu islem icin yetkiniz yok!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+
+    return jsonify(veriler)
+
+@app.route('/is/bireysel/musteri/goster/hepsi/', methods = ['POST'])
+@cross_origin(supports_credentials = True)
+def isBireyselMusteriGosterHepsi():
+    erisimKodu = request.form["erisimKodu"]
+    musteriId = request.form["musteriId"]
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+
+    if(kid):
+        yetki = yetkiKontrol(kid, "bireyselIslerDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM islerBireysel WHERE musteriId = '%s'"""%(musteriId))
+            veriler = im.fetchall()
+            veri = {}
+            veri["durum"] = True
+            veri["mesaj"] = "Islem basarili!"
+            veriler.insert(0, veri)
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Bu islem icin yetkiniz yok!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+
+    return jsonify(veriler)
+
+@app.route('/is/bireysel/guncelle/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
+def isBireyselGuncelle():
+    erisimKodu = request.form["erisimKodu"]
+    isId = request.form["isId"]
+    musteriId = request.form["musteriId"]
+    bransId = request.form["bransId"]
+    sigortaSirketiId = request.form["sigortaSirketiId"]
+    arsivId = request.form["arsivId"]
+    plaka = request.form["plaka"]
+    ruhsatSeriNo = request.form["ruhsatSeriNo"]
+    policeNo = request.form["policeNo"]
+    policeBitisTarihi = request.form["policeBitisTarihi"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "bireyselIslerDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM islerBireysel WHERE id = '%s'"""%(isId))
+            if(not im.fetchone()):
+                veriler["durum"] = False
+                veriler["mesaj"] = "Is bulunamadi!"
+            else:
+                im.execute("""UPDATE islerBireysel SET musteriId = '%s', bransId = '%s', sigortaSirketiId = '%s', arsivId = '%s', plaka = '%s', ruhsatSeriNo = '%s', policeNo = '%s', policeBitisTarihi = '%s' WHERE id = '%s'"""%(musteriId, bransId, sigortaSirketiId, arsivId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi, isId))
+                get_db().commit()
+                veriler["durum"] = True
+                veriler["mesaj"] = "Basarili sekilde is guncellendi!"
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Is guncellemek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
+
+@app.route('/is/bireysel/sil/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
+def isBireyselSil():
+    erisimKodu = request.form["erisimKodu"]
+    isId = request.form["musteriId"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "bireyselIslerDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM islerBireysel WHERE id = '%s'"""%(isId))
+            if(not im.fetchone()):
+                veriler["durum"] = False
+                veriler["mesaj"] = "Is bulunamadi!"
+            else:
+                im.execute("""DELETE FROM islerBireysel WHERE id = '%s'"""%(isId))
+                get_db().commit()
+                veriler["durum"] = True
+                veriler["mesaj"] = "Basarili sekilde is silindi!"
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Is silmek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
+
 
 app.run()

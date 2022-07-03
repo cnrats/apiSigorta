@@ -54,6 +54,17 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 - telefon (text)
 - mailAdresi (text)
 
+**islerBireysel**
+- id (int)
+- musteriId (int)
+- bransId (int)
+- sigortaSirketiId (int)
+- arsivId (int)
+- plaka (text)
+- ruhsatSeriNo (text)
+- policeNo (text)
+- policeBitisTarihi (text)
+
 ## Api Kullanım Kılavuzu
 ### Kullanıcı Denetimi
 **/kullanici/giris/ (Tamamlandı)**
@@ -139,3 +150,18 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 
 **/musteri/sil/ (Tamamlandi)**
 - erisimKodu, musteriId => durum, mesaj;
+
+**/is/bireysel/ekle/**
+- erisimKodu, musteriId, bransId, sigortaSirketiId, arsivId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi => durum, mesaj, isId;
+
+**/is/bireysel/goster/hepsi/**
+- erisimKodu => durum, mesaj, musteriId, bransId, sigortaSirketiId, arsivId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi;
+
+**/is/bireysel/musteri/goster/hepsi/**
+- erisimKodu, musteriId => durum, mesaj, bransId, sigortaSirketiId, arsivId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi;
+
+**/is/bireysel/guncelle/**
+- erisimKodu, isId, musteriId, bransId, sigortaSirketiId, arsivId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi => durum, mesaj;
+
+**/is/bireysel/sil/**
+- erisimKodu, isId => durum, mesaj;
