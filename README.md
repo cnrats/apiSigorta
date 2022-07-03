@@ -219,7 +219,7 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 - erisimKodu, isId => durum, mesaj, miktar, aciklama, tarih;
 
 **/alacaklar/guncelle/**
--erisimKodu, alacakId, miktar, aciklama, tarih => durum, mesaj;
+- erisimKodu, alacakId, miktar, aciklama, tarih => durum, mesaj;
 
 **/alacaklar/sil/**
 - erisimKodu, alacakId = durum, mesaj;
