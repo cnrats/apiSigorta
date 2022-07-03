@@ -1,7 +1,10 @@
 import flask
 from flask import request, jsonify, g
+from flask_cors import CORS, cross_origin
 import sqlite3
 import uuid
+import shutil
+import os
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -45,6 +48,7 @@ def close_connection(exception):
         db.close()
 
 @app.route('/kullanici/giris/', methods = ['POST'])
+@cross_origin(supports_credentials = True)
 def kullaniciGiris():
     im = get_db().cursor()
     kullaniciAdi = request.form["kullaniciAdi"]
@@ -72,6 +76,7 @@ def kullaniciGiris():
     return jsonify(veriler)
 
 @app.route('/kullanici/cikis/', methods = ['POST'])
+@cross_origin(supports_credentials = True)
 def kullaniciCikis():
     erisimKodu = request.form["erisimKodu"]
     im = get_db().cursor()
@@ -92,6 +97,7 @@ def kullaniciCikis():
         return jsonify(veriler)
 
 @app.route('/kullanici/ekle/', methods = ['POST'])
+@cross_origin(supports_credentials = True)
 def kullaniciEkle():
     erisimKodu = request.form["erisimKodu"]
     kullaniciAdi = request.form["kullaniciAdi"]
@@ -137,6 +143,7 @@ def kullaniciEkle():
     return jsonify(veriler)
 
 @app.route('/kullanici/sil/', methods = ['POST'])
+@cross_origin(supports_credentials = True)
 def kullaniciSil():
     erisimKodu = request.form["erisimKodu"]
     kullaniciId = request.form["kullaniciId"]
@@ -168,6 +175,7 @@ def kullaniciSil():
     return jsonify(veriler)
 
 @app.route('/kullanici/goster/hepsi/', methods = ['POST'])
+@cross_origin(supports_credentials = True)
 def kullaniciGosterHepsi():
     erisimKodu = request.form["erisimKodu"]
     kid = oturumKontrol(erisimKodu)
@@ -193,6 +201,7 @@ def kullaniciGosterHepsi():
     return jsonify(veriler)
 
 @app.route('/kullanici/goster/tek/', methods = ['POST'])
+@cross_origin(supports_credentials = True)
 def kullaniciGosterTek():
     erisimKodu = request.form["erisimKodu"]
     kid = oturumKontrol(erisimKodu)
@@ -220,6 +229,7 @@ def kullaniciGosterTek():
     return jsonify(veriler)
 
 @app.route('/kullanici/guncelle/', methods = ['POST'])
+@cross_origin(supports_credentials = True)
 def kullaniciGuncelle():
     erisimKodu = request.form["erisimKodu"]
     kullaniciId = request.form["kullaniciId"]
@@ -261,6 +271,7 @@ def kullaniciGuncelle():
     return jsonify(veriler)
 
 @app.route('/firma/ekle/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
 def firmaEkle():
     erisimKodu = request.form["erisimKodu"]
     firmaAdi = request.form["firmaAdi"]
@@ -292,6 +303,7 @@ def firmaEkle():
     return jsonify(veriler)
 
 @app.route('/firma/goster/hepsi/', methods = ['POST'])
+@cross_origin(supports_credentials = True)
 def firmaGosterHepsi():
     erisimKodu = request.form["erisimKodu"]
     kid = oturumKontrol(erisimKodu)
@@ -317,6 +329,7 @@ def firmaGosterHepsi():
     return jsonify(veriler)
 
 @app.route('/firma/guncelle/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
 def firmaGuncelle():
     erisimKodu = request.form["erisimKodu"]
     firmaAdi = request.form["firmaAdi"]
@@ -346,6 +359,7 @@ def firmaGuncelle():
     return jsonify(veriler)
 
 @app.route('/firma/sil/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
 def firmaSil():
     erisimKodu = request.form["erisimKodu"]
     firmaId = request.form["firmaId"]
@@ -374,6 +388,7 @@ def firmaSil():
     return jsonify(veriler)
 
 @app.route('/arsiv/ekle/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
 def arsivKlasoruEkle():
     erisimKodu = request.form["erisimKodu"]
     arsivKlasoruAdi = request.form["arsivKlasoruAdi"]
@@ -405,6 +420,7 @@ def arsivKlasoruEkle():
     return jsonify(veriler)
 
 @app.route('/arsiv/goster/hepsi/', methods = ['POST'])
+@cross_origin(supports_credentials = True)
 def arsivGosterHepsi():
     erisimKodu = request.form["erisimKodu"]
     kid = oturumKontrol(erisimKodu)
@@ -430,6 +446,7 @@ def arsivGosterHepsi():
     return jsonify(veriler)
 
 @app.route('/arsiv/guncelle/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
 def arsivGuncelle():
     erisimKodu = request.form["erisimKodu"]
     arsivKlasoruId = request.form["arsivKlasoruId"]
@@ -459,6 +476,7 @@ def arsivGuncelle():
     return jsonify(veriler)
 
 @app.route('/arsiv/sil/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
 def arsivSil():
     erisimKodu = request.form["erisimKodu"]
     arsivKlasoruId = request.form["arsivKlasoruId"]
@@ -487,6 +505,7 @@ def arsivSil():
     return jsonify(veriler)
 
 @app.route('/brans/ekle/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
 def bransEkle():
     erisimKodu = request.form["erisimKodu"]
     bransAdi = request.form["bransAdi"]
@@ -518,6 +537,7 @@ def bransEkle():
     return jsonify(veriler)
 
 @app.route('/brans/goster/hepsi/', methods = ['POST'])
+@cross_origin(supports_credentials = True)
 def bransGosterHepsi():
     erisimKodu = request.form["erisimKodu"]
     kid = oturumKontrol(erisimKodu)
@@ -543,6 +563,7 @@ def bransGosterHepsi():
     return jsonify(veriler)
 
 @app.route('/brans/guncelle/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
 def bransGuncelle():
     erisimKodu = request.form["erisimKodu"]
     bransId = request.form["bransId"]
@@ -572,6 +593,7 @@ def bransGuncelle():
     return jsonify(veriler)
 
 @app.route('/brans/sil/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
 def bransSil():
     erisimKodu = request.form["erisimKodu"]
     bransId = request.form["bransId"]
@@ -599,6 +621,143 @@ def bransSil():
         veriler["mesaj"] = "Oturum gecersiz!"
     return jsonify(veriler)
 
+@app.route('/sirket/ekle/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
+def sirketEkle():
+    erisimKodu = request.form["erisimKodu"]
+    sigortaSirketiAdi = request.form["sigortaSirketiAdi"]
+    fotografYolu = request.form["fotografYolu"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "sigortaSirketleriDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM sigortaSirketleri WHERE ad = '%s'"""%(sigortaSirketiAdi))
+            if(im.fetchone()):
+                veriler["durum"] = False
+                veriler["mesaj"] = "Sirket adi baska bir sirket tarafindan kullanilmakta!"
+            else:
+                dosyaTuru = os.path.splitext(fotografYolu)[1]
+                if(dosyaTuru == ".png" or dosyaTuru == ".jpeg" or dosyaTuru == ".jpg"):
+                    yeniDosyaAdi = str(uuid.uuid4()) + dosyaTuru
+                    shutil.copyfile(fotografYolu, './fotograflar/' + yeniDosyaAdi)
+                    im.execute("""INSERT INTO sigortaSirketleri (ad, fotografYolu) VALUES ('%s', '%s')"""%(sigortaSirketiAdi, yeniDosyaAdi))
+                    get_db().commit()
+                    im.execute("""SELECT id FROM sigortaSirketleri WHERE ad = '%s'"""%(sigortaSirketiAdi))
+                    sigortaSirketiId = im.fetchone()
+                    veriler["durum"] = True
+                    veriler["mesaj"] = "Basarili sekilde sirket eklendi!"
+                    veriler["sigortaSirketiId"] = sigortaSirketiId["id"]
+                else:
+                    veriler["durum"] = False
+                    veriler["mesaj"] = "Dosya turu gecersiz!"
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Sirket eklemek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
+
+@app.route('/sirket/goster/hepsi/', methods = ['POST'])
+@cross_origin(supports_credentials = True)
+def sirketGosterHepsi():
+    erisimKodu = request.form["erisimKodu"]
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+
+    if(kid):
+        yetki = yetkiKontrol(kid, "sigortaSirketleriDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM sigortaSirketleri""")
+            veriler = im.fetchall()
+            veri = {}
+            veri["durum"] = True
+            veri["mesaj"] = "Islem basarili!"
+            veriler.insert(0, veri)
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Bu islem icin yetkiniz yok!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+
+    return jsonify(veriler)
+
+@app.route('/sirket/guncelle/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
+def sirketGuncelle():
+    erisimKodu = request.form["erisimKodu"]
+    sigortaSirketiId = request.form["sigortaSirketiId"]
+    sigortaSirketiAdi = request.form["sigortaSirketiAdi"]
+    fotografYolu = request.form["fotografYolu"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "sigortaSirketleriDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM sigortaSirketleri WHERE ad = '%s'"""%(sigortaSirketiAdi))
+            if(im.fetchone()):
+                veriler["durum"] = False
+                veriler["mesaj"] = "Sirket adi baska bir sirket tarafindan kullanilmakta!"
+            else:
+                dosyaTuru = os.path.splitext(fotografYolu)[1]
+                if(dosyaTuru == ".png" or dosyaTuru == ".jpeg" or dosyaTuru == ".jpg"):
+                    yeniDosyaAdi = str(uuid.uuid4()) + dosyaTuru
+                    shutil.copyfile(fotografYolu, './fotograflar/' + yeniDosyaAdi)
+                    im.execute("""SELECT * FROM sigortaSirketleri WHERE id = '%s'"""%(sigortaSirketiId))
+                    bilgi = im.fetchone()
+                    os.remove("./fotograflar/" + bilgi["fotografYolu"])
+                    im.execute("""UPDATE sigortaSirketleri SET ad = '%s', fotografYolu = '%s' WHERE id = '%s'"""%(sigortaSirketiAdi, yeniDosyaAdi, sigortaSirketiId))
+                    get_db().commit()
+                    veriler["durum"] = True
+                    veriler["mesaj"] = "Basarili sekilde sirket guncellendi!"
+                else:
+                    veriler["durum"] = False
+                    veriler["mesaj"] = "Dosya turu gecersiz!"
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Sirket guncellemek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
+
+@app.route('/sirket/sil/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
+def sirketSil():
+    erisimKodu = request.form["erisimKodu"]
+    sigortaSirketiId = request.form["sigortaSirketiId"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "sigortaSirketleriDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM sigortaSirketleri WHERE id = '%s'"""%(sigortaSirketiId))
+            bilgiler = im.fetchone()
+            if(not bilgiler):
+                veriler["durum"] = False
+                veriler["mesaj"] = "Sirket bulunamadi!"
+            else:
+                os.remove("./fotograflar/" + bilgiler["fotografYolu"])
+                im.execute("""DELETE FROM sigortaSirketleri WHERE id = '%s'"""%(sigortaSirketiId))
+                get_db().commit()
+                veriler["durum"] = True
+                veriler["mesaj"] = "Basarili sekilde sirket silindi!"
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Sirket silmek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
 
 
 app.run()

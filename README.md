@@ -40,6 +40,11 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 - id (int)
 - ad (text)
 
+**sigortaSirketleri**
+- id (int)
+- ad (text)
+- fotografYolu (text)
+
 ## Api Kullanım Kılavuzu
 ### Kullanıcı Denetimi
 **/kullanici/giris/ (Tamamlandı)**
@@ -94,7 +99,19 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 - erisimKodu => durum, mesaj, bransId, bransAdi;
 
 **/brans/guncelle/ (Tamamlandi)**
-- erisimKodu, brandId, bransAdi => durum, mesaj;
+- erisimKodu, bransId, bransAdi => durum, mesaj;
 
 **/brans/sil/ (Tamamlandi)**
 - erisimKodu, bransId => durum, mesaj;
+
+**/sirket/ekle/ (Tamamlandi)**
+- erisimKodu, sigortaSirketiAdi, fotografYolu => durum, mesaj, sigortaSirketiId;
+
+**/sirket/goster/hepsi (Tamamlandi)**
+- erisimKodu => durum, mesaj, sigortaSirketiId, sigortaSirketiAdi, fotografYolu;
+
+**/sirket/guncelle/ (Tamamlandi)**
+- erisimKodu, sigortaSirketiAdi, sigortaSirketiId, fotografYolu => durum, mesaj;
+
+**/sirket/sil/ (Tamamlandi)**
+- erisimKodu, sigortaSirketiId => durum, mesaj;
