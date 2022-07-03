@@ -79,6 +79,20 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 - policeNo (text)
 - policeBitisTarihi (text)
 
+**alacaklar**
+- id (int)
+- isId (int)
+- miktar (int)
+- aciklama (text)
+- tarih (text)
+
+**verecekler**
+- id (int)
+- isId (int)
+- miktar (int)
+- aciklama (text)
+- tarih (text)
+
 ## Api Kullanım Kılavuzu
 ### Kullanıcı Denetimi
 **/kullanici/giris/ (Tamamlandı)**
@@ -197,3 +211,27 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 
 **/is/ortak/sil/**
 - erisimKodu, isId => durum, mesaj;
+
+**/alacaklar/ekle/**
+- erisimKodu, isId, miktar, aciklama, tarih => durum, mesaj;
+
+**/alacaklar/goster/**
+- erisimKodu, isId => durum, mesaj, miktar, aciklama, tarih;
+
+**/alacaklar/guncelle/**
+-erisimKodu, alacakId, miktar, aciklama, tarih => durum, mesaj;
+
+**/alacaklar/sil/**
+- erisimKodu, alacakId = durum, mesaj;
+
+**/verecekler/ekle/**
+- erisimKodu, isId, miktar, aciklama, tarih => durum, mesaj;
+
+**/verecekler/goster/**
+- erisimKodu, isId => durum, mesaj, miktar, aciklama, tarih;
+
+**/verecekler/guncelle/**
+-erisimKodu, alacakId, miktar, aciklama, tarih => durum, mesaj;
+
+**/verecekler/sil/**
+- erisimKodu, alacakId = durum, mesaj;

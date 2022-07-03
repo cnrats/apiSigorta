@@ -51,8 +51,8 @@ def close_connection(exception):
 @cross_origin(supports_credentials = True)
 def kullaniciGiris():
     im = get_db().cursor()
-    kullaniciAdi = request.form["kullaniciAdi"]
-    sifre = request.form["sifre"]
+    kullaniciAdi = request.json["kullaniciAdi"]
+    sifre = request.json["sifre"]
     im.execute("""SELECT id, kullaniciAdi FROM kullanicilar WHERE kullaniciAdi='%s' AND sifre='%s'"""%(kullaniciAdi, sifre))
     veriler = im.fetchone()
     if(veriler):
@@ -78,7 +78,7 @@ def kullaniciGiris():
 @app.route('/kullanici/cikis/', methods = ['POST'])
 @cross_origin(supports_credentials = True)
 def kullaniciCikis():
-    erisimKodu = request.form["erisimKodu"]
+    erisimKodu = request.json["erisimKodu"]
     im = get_db().cursor()
     im.execute("""SELECT * FROM oturumlar WHERE erisimKodu = '%s'"""%(erisimKodu))
     oturum = im.fetchone()
@@ -99,20 +99,20 @@ def kullaniciCikis():
 @app.route('/kullanici/ekle/', methods = ['POST'])
 @cross_origin(supports_credentials = True)
 def kullaniciEkle():
-    erisimKodu = request.form["erisimKodu"]
-    kullaniciAdi = request.form["kullaniciAdi"]
-    sifre = request.form["sifre"]
-    firmalarDuzenle = request.form["firmalarDuzenle"]
-    musterilerDuzenle = request.form["musterilerDuzenle"]
-    arsivKlasorleriDuzenle = request.form["arsivKlasorleriDuzenle"]
-    branslarDuzenle = request.form["branslarDuzenle"]
-    sigortaSirketleriDuzenle = request.form["sigortaSirketleriDuzenle"]
-    bireyselIslerDuzenle = request.form["bireyselIslerDuzenle"]
-    ortakIslerDuzenle = request.form["ortakIslerDuzenle"]
-    alacaklarDuzenle = request.form["alacaklarDuzenle"]
-    verilenlerDuzenle = request.form["verilenlerDuzenle"]
-    kullanicilarDuzenle = request.form["kullanicilarDuzenle"]
-    kayitlarGoruntule = request.form["kayitlarGoruntule"]
+    erisimKodu = request.json["erisimKodu"]
+    kullaniciAdi = request.json["kullaniciAdi"]
+    sifre = request.json["sifre"]
+    firmalarDuzenle = request.json["firmalarDuzenle"]
+    musterilerDuzenle = request.json["musterilerDuzenle"]
+    arsivKlasorleriDuzenle = request.json["arsivKlasorleriDuzenle"]
+    branslarDuzenle = request.json["branslarDuzenle"]
+    sigortaSirketleriDuzenle = request.json["sigortaSirketleriDuzenle"]
+    bireyselIslerDuzenle = request.json["bireyselIslerDuzenle"]
+    ortakIslerDuzenle = request.json["ortakIslerDuzenle"]
+    alacaklarDuzenle = request.json["alacaklarDuzenle"]
+    verilenlerDuzenle = request.json["verilenlerDuzenle"]
+    kullanicilarDuzenle = request.json["kullanicilarDuzenle"]
+    kayitlarGoruntule = request.json["kayitlarGoruntule"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -145,8 +145,8 @@ def kullaniciEkle():
 @app.route('/kullanici/sil/', methods = ['POST'])
 @cross_origin(supports_credentials = True)
 def kullaniciSil():
-    erisimKodu = request.form["erisimKodu"]
-    kullaniciId = request.form["kullaniciId"]
+    erisimKodu = request.json["erisimKodu"]
+    kullaniciId = request.json["kullaniciId"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -177,7 +177,7 @@ def kullaniciSil():
 @app.route('/kullanici/goster/hepsi/', methods = ['POST'])
 @cross_origin(supports_credentials = True)
 def kullaniciGosterHepsi():
-    erisimKodu = request.form["erisimKodu"]
+    erisimKodu = request.json["erisimKodu"]
     kid = oturumKontrol(erisimKodu)
     veriler = {}
 
@@ -203,14 +203,14 @@ def kullaniciGosterHepsi():
 @app.route('/kullanici/goster/tek/', methods = ['POST'])
 @cross_origin(supports_credentials = True)
 def kullaniciGosterTek():
-    erisimKodu = request.form["erisimKodu"]
+    erisimKodu = request.json["erisimKodu"]
     kid = oturumKontrol(erisimKodu)
     veriler = {}
 
     if(kid):
         yetki = yetkiKontrol(kid, "kullanicilarDuzenle")
         if(yetki):
-            kullaniciId = request.form["kullaniciId"]
+            kullaniciId = request.json["kullaniciId"]
             im = get_db().cursor()
             im.execute("""SELECT kullaniciAdi FROM kullanicilar WHERE id = '%s'"""%(kullaniciId))
             veriler = im.fetchone()
@@ -231,20 +231,20 @@ def kullaniciGosterTek():
 @app.route('/kullanici/guncelle/', methods = ['POST'])
 @cross_origin(supports_credentials = True)
 def kullaniciGuncelle():
-    erisimKodu = request.form["erisimKodu"]
-    kullaniciId = request.form["kullaniciId"]
-    sifre = request.form["sifre"]
-    firmalarDuzenle = request.form["firmalarDuzenle"]
-    musterilerDuzenle = request.form["musterilerDuzenle"]
-    arsivKlasorleriDuzenle = request.form["arsivKlasorleriDuzenle"]
-    branslarDuzenle = request.form["branslarDuzenle"]
-    sigortaSirketleriDuzenle = request.form["sigortaSirketleriDuzenle"]
-    bireyselIslerDuzenle = request.form["bireyselIslerDuzenle"]
-    ortakIslerDuzenle = request.form["ortakIslerDuzenle"]
-    alacaklarDuzenle = request.form["alacaklarDuzenle"]
-    verilenlerDuzenle = request.form["verilenlerDuzenle"]
-    kullanicilarDuzenle = request.form["kullanicilarDuzenle"]
-    kayitlarGoruntule = request.form["kayitlarGoruntule"]
+    erisimKodu = request.json["erisimKodu"]
+    kullaniciId = request.json["kullaniciId"]
+    sifre = request.json["sifre"]
+    firmalarDuzenle = request.json["firmalarDuzenle"]
+    musterilerDuzenle = request.json["musterilerDuzenle"]
+    arsivKlasorleriDuzenle = request.json["arsivKlasorleriDuzenle"]
+    branslarDuzenle = request.json["branslarDuzenle"]
+    sigortaSirketleriDuzenle = request.json["sigortaSirketleriDuzenle"]
+    bireyselIslerDuzenle = request.json["bireyselIslerDuzenle"]
+    ortakIslerDuzenle = request.json["ortakIslerDuzenle"]
+    alacaklarDuzenle = request.json["alacaklarDuzenle"]
+    verilenlerDuzenle = request.json["verilenlerDuzenle"]
+    kullanicilarDuzenle = request.json["kullanicilarDuzenle"]
+    kayitlarGoruntule = request.json["kayitlarGoruntule"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -273,8 +273,8 @@ def kullaniciGuncelle():
 @app.route('/firma/ekle/', methods = ["POST"])
 @cross_origin(supports_credentials = True)
 def firmaEkle():
-    erisimKodu = request.form["erisimKodu"]
-    firmaAdi = request.form["firmaAdi"]
+    erisimKodu = request.json["erisimKodu"]
+    firmaAdi = request.json["firmaAdi"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -305,7 +305,7 @@ def firmaEkle():
 @app.route('/firma/goster/hepsi/', methods = ['POST'])
 @cross_origin(supports_credentials = True)
 def firmaGosterHepsi():
-    erisimKodu = request.form["erisimKodu"]
+    erisimKodu = request.json["erisimKodu"]
     kid = oturumKontrol(erisimKodu)
     veriler = {}
 
@@ -331,9 +331,9 @@ def firmaGosterHepsi():
 @app.route('/firma/guncelle/', methods = ["POST"])
 @cross_origin(supports_credentials = True)
 def firmaGuncelle():
-    erisimKodu = request.form["erisimKodu"]
-    firmaAdi = request.form["firmaAdi"]
-    firmaId = request.form["firmaId"]
+    erisimKodu = request.json["erisimKodu"]
+    firmaAdi = request.json["firmaAdi"]
+    firmaId = request.json["firmaId"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -361,8 +361,8 @@ def firmaGuncelle():
 @app.route('/firma/sil/', methods = ["POST"])
 @cross_origin(supports_credentials = True)
 def firmaSil():
-    erisimKodu = request.form["erisimKodu"]
-    firmaId = request.form["firmaId"]
+    erisimKodu = request.json["erisimKodu"]
+    firmaId = request.json["firmaId"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -390,8 +390,8 @@ def firmaSil():
 @app.route('/arsiv/ekle/', methods = ["POST"])
 @cross_origin(supports_credentials = True)
 def arsivKlasoruEkle():
-    erisimKodu = request.form["erisimKodu"]
-    arsivKlasoruAdi = request.form["arsivKlasoruAdi"]
+    erisimKodu = request.json["erisimKodu"]
+    arsivKlasoruAdi = request.json["arsivKlasoruAdi"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -422,7 +422,7 @@ def arsivKlasoruEkle():
 @app.route('/arsiv/goster/hepsi/', methods = ['POST'])
 @cross_origin(supports_credentials = True)
 def arsivGosterHepsi():
-    erisimKodu = request.form["erisimKodu"]
+    erisimKodu = request.json["erisimKodu"]
     kid = oturumKontrol(erisimKodu)
     veriler = {}
 
@@ -448,9 +448,9 @@ def arsivGosterHepsi():
 @app.route('/arsiv/guncelle/', methods = ["POST"])
 @cross_origin(supports_credentials = True)
 def arsivGuncelle():
-    erisimKodu = request.form["erisimKodu"]
-    arsivKlasoruId = request.form["arsivKlasoruId"]
-    arsivKlasoruAdi = request.form["arsivKlasoruAdi"]
+    erisimKodu = request.json["erisimKodu"]
+    arsivKlasoruId = request.json["arsivKlasoruId"]
+    arsivKlasoruAdi = request.json["arsivKlasoruAdi"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -478,8 +478,8 @@ def arsivGuncelle():
 @app.route('/arsiv/sil/', methods = ["POST"])
 @cross_origin(supports_credentials = True)
 def arsivSil():
-    erisimKodu = request.form["erisimKodu"]
-    arsivKlasoruId = request.form["arsivKlasoruId"]
+    erisimKodu = request.json["erisimKodu"]
+    arsivKlasoruId = request.json["arsivKlasoruId"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -507,8 +507,8 @@ def arsivSil():
 @app.route('/brans/ekle/', methods = ["POST"])
 @cross_origin(supports_credentials = True)
 def bransEkle():
-    erisimKodu = request.form["erisimKodu"]
-    bransAdi = request.form["bransAdi"]
+    erisimKodu = request.json["erisimKodu"]
+    bransAdi = request.json["bransAdi"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -539,7 +539,7 @@ def bransEkle():
 @app.route('/brans/goster/hepsi/', methods = ['POST'])
 @cross_origin(supports_credentials = True)
 def bransGosterHepsi():
-    erisimKodu = request.form["erisimKodu"]
+    erisimKodu = request.json["erisimKodu"]
     kid = oturumKontrol(erisimKodu)
     veriler = {}
 
@@ -565,9 +565,9 @@ def bransGosterHepsi():
 @app.route('/brans/guncelle/', methods = ["POST"])
 @cross_origin(supports_credentials = True)
 def bransGuncelle():
-    erisimKodu = request.form["erisimKodu"]
-    bransId = request.form["bransId"]
-    bransAdi = request.form["bransAdi"]
+    erisimKodu = request.json["erisimKodu"]
+    bransId = request.json["bransId"]
+    bransAdi = request.json["bransAdi"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -595,8 +595,8 @@ def bransGuncelle():
 @app.route('/brans/sil/', methods = ["POST"])
 @cross_origin(supports_credentials = True)
 def bransSil():
-    erisimKodu = request.form["erisimKodu"]
-    bransId = request.form["bransId"]
+    erisimKodu = request.json["erisimKodu"]
+    bransId = request.json["bransId"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -624,9 +624,9 @@ def bransSil():
 @app.route('/sirket/ekle/', methods = ["POST"])
 @cross_origin(supports_credentials = True)
 def sirketEkle():
-    erisimKodu = request.form["erisimKodu"]
-    sigortaSirketiAdi = request.form["sigortaSirketiAdi"]
-    fotografYolu = request.form["fotografYolu"]
+    erisimKodu = request.json["erisimKodu"]
+    sigortaSirketiAdi = request.json["sigortaSirketiAdi"]
+    fotografYolu = request.json["fotografYolu"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -664,7 +664,7 @@ def sirketEkle():
 @app.route('/sirket/goster/hepsi/', methods = ['POST'])
 @cross_origin(supports_credentials = True)
 def sirketGosterHepsi():
-    erisimKodu = request.form["erisimKodu"]
+    erisimKodu = request.json["erisimKodu"]
     kid = oturumKontrol(erisimKodu)
     veriler = {}
 
@@ -690,10 +690,10 @@ def sirketGosterHepsi():
 @app.route('/sirket/guncelle/', methods = ["POST"])
 @cross_origin(supports_credentials = True)
 def sirketGuncelle():
-    erisimKodu = request.form["erisimKodu"]
-    sigortaSirketiId = request.form["sigortaSirketiId"]
-    sigortaSirketiAdi = request.form["sigortaSirketiAdi"]
-    fotografYolu = request.form["fotografYolu"]
+    erisimKodu = request.json["erisimKodu"]
+    sigortaSirketiId = request.json["sigortaSirketiId"]
+    sigortaSirketiAdi = request.json["sigortaSirketiAdi"]
+    fotografYolu = request.json["fotografYolu"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -731,8 +731,8 @@ def sirketGuncelle():
 @app.route('/sirket/sil/', methods = ["POST"])
 @cross_origin(supports_credentials = True)
 def sirketSil():
-    erisimKodu = request.form["erisimKodu"]
-    sigortaSirketiId = request.form["sigortaSirketiId"]
+    erisimKodu = request.json["erisimKodu"]
+    sigortaSirketiId = request.json["sigortaSirketiId"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -762,13 +762,13 @@ def sirketSil():
 @app.route('/musteri/ekle/', methods = ["POST"])
 @cross_origin(supports_credentials = True)
 def musteriEkle():
-    erisimKodu = request.form["erisimKodu"]
-    musteriAdi = request.form["musteriAdi"]
-    musteriSoyadi = request.form["musteriSoyadi"]
-    musteriTc = request.form["musteriTc"]
-    musteriDogumTarihi = request.form["musteriDogumTarihi"]
-    musteriTelefon = request.form["musteriTelefon"]
-    musteriMailAdresi = request.form["musteriMailAdresi"]
+    erisimKodu = request.json["erisimKodu"]
+    musteriAdi = request.json["musteriAdi"]
+    musteriSoyadi = request.json["musteriSoyadi"]
+    musteriTc = request.json["musteriTc"]
+    musteriDogumTarihi = request.json["musteriDogumTarihi"]
+    musteriTelefon = request.json["musteriTelefon"]
+    musteriMailAdresi = request.json["musteriMailAdresi"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -799,7 +799,7 @@ def musteriEkle():
 @app.route('/musteri/goster/hepsi/', methods = ['POST'])
 @cross_origin(supports_credentials = True)
 def musteriGosterHepsi():
-    erisimKodu = request.form["erisimKodu"]
+    erisimKodu = request.json["erisimKodu"]
     kid = oturumKontrol(erisimKodu)
     veriler = {}
 
@@ -825,8 +825,8 @@ def musteriGosterHepsi():
 @app.route('/musteri/goster/tek/', methods = ['POST'])
 @cross_origin(supports_credentials = True)
 def musteriGosterTek():
-    erisimKodu = request.form["erisimKodu"]
-    musteriId = request.form["musteriId"]
+    erisimKodu = request.json["erisimKodu"]
+    musteriId = request.json["musteriId"]
     kid = oturumKontrol(erisimKodu)
     veriler = {}
 
@@ -850,14 +850,14 @@ def musteriGosterTek():
 @app.route('/musteri/guncelle/', methods = ["POST"])
 @cross_origin(supports_credentials = True)
 def musteriGuncelle():
-    erisimKodu = request.form["erisimKodu"]
-    musteriId = request.form["musteriId"]
-    musteriAdi = request.form["musteriAdi"]
-    musteriSoyadi = request.form["musteriSoyadi"]
-    musteriTc = request.form["musteriTc"]
-    musteriDogumTarihi = request.form["musteriDogumTarihi"]
-    musteriTelefon = request.form["musteriTelefon"]
-    musteriMailAdresi = request.form["musteriMailAdresi"]
+    erisimKodu = request.json["erisimKodu"]
+    musteriId = request.json["musteriId"]
+    musteriAdi = request.json["musteriAdi"]
+    musteriSoyadi = request.json["musteriSoyadi"]
+    musteriTc = request.json["musteriTc"]
+    musteriDogumTarihi = request.json["musteriDogumTarihi"]
+    musteriTelefon = request.json["musteriTelefon"]
+    musteriMailAdresi = request.json["musteriMailAdresi"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -885,8 +885,8 @@ def musteriGuncelle():
 @app.route('/musteri/sil/', methods = ["POST"])
 @cross_origin(supports_credentials = True)
 def musteriSil():
-    erisimKodu = request.form["erisimKodu"]
-    musteriId = request.form["musteriId"]
+    erisimKodu = request.json["erisimKodu"]
+    musteriId = request.json["musteriId"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -914,15 +914,15 @@ def musteriSil():
 @app.route('/is/bireysel/ekle/', methods = ["POST"])
 @cross_origin(supports_credentials = True)
 def isBireyselEkle():
-    erisimKodu = request.form["erisimKodu"]
-    musteriId = request.form["musteriId"]
-    bransId = request.form["bransId"]
-    sigortaSirketiId = request.form["sigortaSirketiId"]
-    arsivId = request.form["arsivId"]
-    plaka = request.form["plaka"]
-    ruhsatSeriNo = request.form["ruhsatSeriNo"]
-    policeNo = request.form["policeNo"]
-    policeBitisTarihi = request.form["policeBitisTarihi"]
+    erisimKodu = request.json["erisimKodu"]
+    musteriId = request.json["musteriId"]
+    bransId = request.json["bransId"]
+    sigortaSirketiId = request.json["sigortaSirketiId"]
+    arsivId = request.json["arsivId"]
+    plaka = request.json["plaka"]
+    ruhsatSeriNo = request.json["ruhsatSeriNo"]
+    policeNo = request.json["policeNo"]
+    policeBitisTarihi = request.json["policeBitisTarihi"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -945,7 +945,7 @@ def isBireyselEkle():
 @app.route('/is/bireysel/goster/hepsi/', methods = ['POST'])
 @cross_origin(supports_credentials = True)
 def isBireyselGosterHepsi():
-    erisimKodu = request.form["erisimKodu"]
+    erisimKodu = request.json["erisimKodu"]
     kid = oturumKontrol(erisimKodu)
     veriler = {}
 
@@ -971,8 +971,8 @@ def isBireyselGosterHepsi():
 @app.route('/is/bireysel/musteri/goster/hepsi/', methods = ['POST'])
 @cross_origin(supports_credentials = True)
 def isBireyselMusteriGosterHepsi():
-    erisimKodu = request.form["erisimKodu"]
-    musteriId = request.form["musteriId"]
+    erisimKodu = request.json["erisimKodu"]
+    musteriId = request.json["musteriId"]
     kid = oturumKontrol(erisimKodu)
     veriler = {}
 
@@ -998,16 +998,16 @@ def isBireyselMusteriGosterHepsi():
 @app.route('/is/bireysel/guncelle/', methods = ["POST"])
 @cross_origin(supports_credentials = True)
 def isBireyselGuncelle():
-    erisimKodu = request.form["erisimKodu"]
-    isId = request.form["isId"]
-    musteriId = request.form["musteriId"]
-    bransId = request.form["bransId"]
-    sigortaSirketiId = request.form["sigortaSirketiId"]
-    arsivId = request.form["arsivId"]
-    plaka = request.form["plaka"]
-    ruhsatSeriNo = request.form["ruhsatSeriNo"]
-    policeNo = request.form["policeNo"]
-    policeBitisTarihi = request.form["policeBitisTarihi"]
+    erisimKodu = request.json["erisimKodu"]
+    isId = request.json["isId"]
+    musteriId = request.json["musteriId"]
+    bransId = request.json["bransId"]
+    sigortaSirketiId = request.json["sigortaSirketiId"]
+    arsivId = request.json["arsivId"]
+    plaka = request.json["plaka"]
+    ruhsatSeriNo = request.json["ruhsatSeriNo"]
+    policeNo = request.json["policeNo"]
+    policeBitisTarihi = request.json["policeBitisTarihi"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -1035,8 +1035,8 @@ def isBireyselGuncelle():
 @app.route('/is/bireysel/sil/', methods = ["POST"])
 @cross_origin(supports_credentials = True)
 def isBireyselSil():
-    erisimKodu = request.form["erisimKodu"]
-    isId = request.form["musteriId"]
+    erisimKodu = request.json["erisimKodu"]
+    isId = request.json["musteriId"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -1064,18 +1064,18 @@ def isBireyselSil():
 @app.route('/is/ortak/ekle/', methods = ["POST"])
 @cross_origin(supports_credentials = True)
 def isOrtakEkle():
-    erisimKodu = request.form["erisimKodu"]
-    musteriId = request.form["musteriId"]
-    bransId = request.form["bransId"]
-    sigortaSirketiId = request.form["sigortaSirketiId"]
-    arsivId = request.form["arsivId"]
-    firmaId = request.form["firmaId"]
-    komisyonOraniKendisi = request.form["komisyonOraniKendisi"]
-    komisyonOraniFirma = request.form["komisyonOraniFirma"]
-    plaka = request.form["plaka"]
-    ruhsatSeriNo = request.form["ruhsatSeriNo"]
-    policeNo = request.form["policeNo"]
-    policeBitisTarihi = request.form["policeBitisTarihi"]
+    erisimKodu = request.json["erisimKodu"]
+    musteriId = request.json["musteriId"]
+    bransId = request.json["bransId"]
+    sigortaSirketiId = request.json["sigortaSirketiId"]
+    arsivId = request.json["arsivId"]
+    firmaId = request.json["firmaId"]
+    komisyonOraniKendisi = request.json["komisyonOraniKendisi"]
+    komisyonOraniFirma = request.json["komisyonOraniFirma"]
+    plaka = request.json["plaka"]
+    ruhsatSeriNo = request.json["ruhsatSeriNo"]
+    policeNo = request.json["policeNo"]
+    policeBitisTarihi = request.json["policeBitisTarihi"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -1098,7 +1098,7 @@ def isOrtakEkle():
 @app.route('/is/ortak/goster/hepsi/', methods = ['POST'])
 @cross_origin(supports_credentials = True)
 def isOrtakGosterHepsi():
-    erisimKodu = request.form["erisimKodu"]
+    erisimKodu = request.json["erisimKodu"]
     kid = oturumKontrol(erisimKodu)
     veriler = {}
 
@@ -1124,8 +1124,8 @@ def isOrtakGosterHepsi():
 @app.route('/is/ortak/musteri/goster/hepsi/', methods = ['POST'])
 @cross_origin(supports_credentials = True)
 def isOrtakMusteriGosterHepsi():
-    erisimKodu = request.form["erisimKodu"]
-    musteriId = request.form["musteriId"]
+    erisimKodu = request.json["erisimKodu"]
+    musteriId = request.json["musteriId"]
     kid = oturumKontrol(erisimKodu)
     veriler = {}
 
@@ -1151,8 +1151,8 @@ def isOrtakMusteriGosterHepsi():
 @app.route('/is/ortak/firma/goster/hepsi/', methods = ['POST'])
 @cross_origin(supports_credentials = True)
 def isOrtakFirmaGosterHepsi():
-    erisimKodu = request.form["erisimKodu"]
-    firmaId = request.form["firmaId"]
+    erisimKodu = request.json["erisimKodu"]
+    firmaId = request.json["firmaId"]
     kid = oturumKontrol(erisimKodu)
     veriler = {}
 
@@ -1178,19 +1178,19 @@ def isOrtakFirmaGosterHepsi():
 @app.route('/is/ortak/guncelle/', methods = ["POST"])
 @cross_origin(supports_credentials = True)
 def isOrtakGuncelle():
-    erisimKodu = request.form["erisimKodu"]
-    isId = request.form["isId"]
-    musteriId = request.form["musteriId"]
-    bransId = request.form["bransId"]
-    sigortaSirketiId = request.form["sigortaSirketiId"]
-    arsivId = request.form["arsivId"]
-    firmaId = request.form["firmaId"]
-    komisyonOraniKendisi = request.form["komisyonOraniKendisi"]
-    komisyonOraniFirma = request.form["komisyonOraniFirma"]
-    plaka = request.form["plaka"]
-    ruhsatSeriNo = request.form["ruhsatSeriNo"]
-    policeNo = request.form["policeNo"]
-    policeBitisTarihi = request.form["policeBitisTarihi"]
+    erisimKodu = request.json["erisimKodu"]
+    isId = request.json["isId"]
+    musteriId = request.json["musteriId"]
+    bransId = request.json["bransId"]
+    sigortaSirketiId = request.json["sigortaSirketiId"]
+    arsivId = request.json["arsivId"]
+    firmaId = request.json["firmaId"]
+    komisyonOraniKendisi = request.json["komisyonOraniKendisi"]
+    komisyonOraniFirma = request.json["komisyonOraniFirma"]
+    plaka = request.json["plaka"]
+    ruhsatSeriNo = request.json["ruhsatSeriNo"]
+    policeNo = request.json["policeNo"]
+    policeBitisTarihi = request.json["policeBitisTarihi"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -1218,8 +1218,8 @@ def isOrtakGuncelle():
 @app.route('/is/ortak/sil/', methods = ["POST"])
 @cross_origin(supports_credentials = True)
 def isOrtakSil():
-    erisimKodu = request.form["erisimKodu"]
-    isId = request.form["isId"]
+    erisimKodu = request.json["erisimKodu"]
+    isId = request.json["isId"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -1239,6 +1239,226 @@ def isOrtakSil():
         else:
             veriler["durum"] = False
             veriler["mesaj"] = "Is silmek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
+
+@app.route('/alacaklar/ekle/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
+def alacaklarEkle():
+    erisimKodu = request.json["erisimKodu"]
+    isId = request.json["isId"]
+    miktar = request.json["miktar"]
+    aciklama = request.json["aciklama"]
+    tarih = request.json["tarih"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "alacaklarDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""INSERT INTO alacaklar (isId, miktar, aciklama, tarih) VALUES ('%s', '%s', '%s', '%s')"""%(isId, miktar, aciklama, tarih))
+            get_db().commit()
+            veriler["durum"] = True
+            veriler["mesaj"] = "Basarili sekilde alacak eklendi!"
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Alacak eklemek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
+
+@app.route('/alacaklar/goster/', methods = ['POST'])
+@cross_origin(supports_credentials = True)
+def alacakGoster():
+    erisimKodu = request.json["erisimKodu"]
+    kid = oturumKontrol(erisimKodu)
+    isId = request.json["isId"]
+    veriler = {}
+
+    if(kid):
+        yetki = yetkiKontrol(kid, "alacaklarDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM alacaklar WHERE isId = '%s'"""%(isId))
+            veriler = im.fetchall()
+            veri = {}
+            veri["durum"] = True
+            veri["mesaj"] = "Islem basarili!"
+            veriler.insert(0, veri)
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Bu islem icin yetkiniz yok!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+
+    return jsonify(veriler)
+
+@app.route('/alacaklar/guncelle/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
+def alacaklarGuncelle():
+    erisimKodu = request.json["erisimKodu"]
+    alacakId = request.json["alacakId"]
+    miktar = request.json["miktar"]
+    aciklama = request.json["aciklama"]
+    tarih = request.json["tarih"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "alacaklarDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""UPDATE alacaklar SET miktar = '%s', aciklama = '%s', tarih = '%s' WHERE id= '%s'"""%(miktar, aciklama, tarih, alacakId))
+            get_db().commit()
+            veriler["durum"] = True
+            veriler["mesaj"] = "Basarili sekilde alacak guncellendi!"
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "alacak guncellemek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
+
+@app.route('/alacaklar/sil/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
+def alacaklarSil():
+    erisimKodu = request.json["erisimKodu"]
+    alacakId = request.json["alacakId"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "alacaklarDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM alacaklar WHERE id = '%s'"""%(alacakId))
+            if(not im.fetchone()):
+                veriler["durum"] = False
+                veriler["mesaj"] = "Alacak bulunamadi!"
+            else:
+                im.execute("""DELETE FROM alacaklar WHERE id = '%s'"""%(alacakId))
+                get_db().commit()
+                veriler["durum"] = True
+                veriler["mesaj"] = "Basarili sekilde alacak silindi!"
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Alacak silmek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
+
+@app.route('/verecekler/ekle/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
+def vereceklerEkle():
+    erisimKodu = request.json["erisimKodu"]
+    isId = request.json["isId"]
+    miktar = request.json["miktar"]
+    aciklama = request.json["aciklama"]
+    tarih = request.json["tarih"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "vereceklerDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""INSERT INTO verecekler (isId, miktar, aciklama, tarih) VALUES ('%s', '%s', '%s', '%s')"""%(isId, miktar, aciklama, tarih))
+            get_db().commit()
+            veriler["durum"] = True
+            veriler["mesaj"] = "Basarili sekilde verecek eklendi!"
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Verecek eklemek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
+
+@app.route('/verecekler/goster/', methods = ['POST'])
+@cross_origin(supports_credentials = True)
+def vereceklerGoster():
+    erisimKodu = request.json["erisimKodu"]
+    kid = oturumKontrol(erisimKodu)
+    isId = request.json["isId"]
+    veriler = {}
+
+    if(kid):
+        yetki = yetkiKontrol(kid, "vereceklerDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM verecekler WHERE isId = '%s'"""%(isId))
+            veriler = im.fetchall()
+            veri = {}
+            veri["durum"] = True
+            veri["mesaj"] = "Islem basarili!"
+            veriler.insert(0, veri)
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Bu islem icin yetkiniz yok!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+
+    return jsonify(veriler)
+
+@app.route('/verecekler/guncelle/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
+def vereceklerGuncelle():
+    erisimKodu = request.json["erisimKodu"]
+    verecekId = request.json["verecekId"]
+    miktar = request.json["miktar"]
+    aciklama = request.json["aciklama"]
+    tarih = request.json["tarih"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "vereceklerDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""UPDATE verecekler SET miktar = '%s', aciklama = '%s', tarih = '%s' WHERE id= '%s'"""%(miktar, aciklama, tarih, verecekId))
+            get_db().commit()
+            veriler["durum"] = True
+            veriler["mesaj"] = "Basarili sekilde verecek guncellendi!"
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Verecek guncellemek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
+
+@app.route('/verecekler/sil/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
+def vereceklerSil():
+    erisimKodu = request.json["erisimKodu"]
+    verecekId = request.json["verecekId"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "vereceklerDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM verecekler WHERE id = '%s'"""%(verecekId))
+            if(not im.fetchone()):
+                veriler["durum"] = False
+                veriler["mesaj"] = "Verecek bulunamadi!"
+            else:
+                im.execute("""DELETE FROM verecekler WHERE id = '%s'"""%(verecekId))
+                get_db().commit()
+                veriler["durum"] = True
+                veriler["mesaj"] = "Basarili sekilde verecek silindi!"
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Verecek silmek icin yetkiniz bulunmuyor!"
     else:
         veriler["durum"] = False
         veriler["mesaj"] = "Oturum gecersiz!"
