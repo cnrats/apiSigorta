@@ -188,6 +188,9 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 **/is/bireysel/musteri/goster/hepsi/**
 - erisimKodu, musteriId => durum, mesaj, bransId, sigortaSirketiId, arsivId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi;
 
+**/is/bireysel/arsiv/goster/hepsi/**
+- erisimKodu, arsivId => durum, mesaj, bransId, sigortaSirketiId, musteriId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi;
+
 **/is/bireysel/guncelle/**
 - erisimKodu, isId, musteriId, bransId, sigortaSirketiId, arsivId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi => durum, mesaj;
 
@@ -202,6 +205,9 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 
 **/is/ortak/musteri/goster/hepsi/**
 - erisimKodu, musteriId => durum, mesaj, bransId, sigortaSirketiId, arsivId, firmaId, komisyonOraniKendisi, komisyonOraniFirma, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi;
+
+**/is/ortak/arsiv/goster/hepsi/**
+- erisimKodu, arsivId => durum, mesaj, bransId, sigortaSirketiId, musteriId, firmaId, komisyonOraniKendisi, komisyonOraniFirma, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi;
 
 **/is/ortak/firma/goster/hepsi/**
 - erisimKodu, firmaId => durum, mesaj, bransId, sigortaSirketiId, arsivId, musteriId, komisyonOraniKendisi, komisyonOraniFirma, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi;

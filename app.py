@@ -974,6 +974,34 @@ def isBireyselMusteriGosterHepsi():
 
     return jsonify(veriler)
 
+@app.route('/is/bireysel/arsiv/goster/hepsi/', methods = ['POST'])
+@cross_origin(supports_credentials = True)
+def isBireyselArsivGosterHepsi():
+    erisimKodu = request.json["erisimKodu"]
+    arsivId = request.json["arsivId"]
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+
+    if(kid):
+        yetki = yetkiKontrol(kid, "bireyselIslerDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM islerBireysel WHERE arsivId = '%s'"""%(arsivId))
+            veriler = im.fetchall()
+            veri = {}
+            veri["durum"] = True
+            veri["mesaj"] = "Islem basarili!"
+            veriler.insert(0, veri)
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Bu islem icin yetkiniz yok!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+
+    return jsonify(veriler)
+
+
 @app.route('/is/bireysel/guncelle/', methods = ["POST"])
 @cross_origin(supports_credentials = True)
 def isBireyselGuncelle():
@@ -1113,6 +1141,33 @@ def isOrtakMusteriGosterHepsi():
         if(yetki):
             im = get_db().cursor()
             im.execute("""SELECT * FROM islerOrtak WHERE musteriId = '%s'"""%(musteriId))
+            veriler = im.fetchall()
+            veri = {}
+            veri["durum"] = True
+            veri["mesaj"] = "Islem basarili!"
+            veriler.insert(0, veri)
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Bu islem icin yetkiniz yok!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+
+    return jsonify(veriler)
+
+@app.route('/is/ortak/arsiv/goster/hepsi/', methods = ['POST'])
+@cross_origin(supports_credentials = True)
+def isOrtakArsivGosterHepsi():
+    erisimKodu = request.json["erisimKodu"]
+    arsivId = request.json["arsivId"]
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+
+    if(kid):
+        yetki = yetkiKontrol(kid, "ortakIslerDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM islerOrtak WHERE arsivId = '%s'"""%(arsivId))
             veriler = im.fetchall()
             veri = {}
             veri["durum"] = True
