@@ -3,8 +3,6 @@ from flask import request, jsonify, g
 from flask_cors import CORS, cross_origin
 import sqlite3
 import uuid
-import shutil
-import os
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -1446,6 +1444,13 @@ def vereceklerSil():
         veriler["durum"] = False
         veriler["mesaj"] = "Oturum gecersiz!"
     return jsonify(veriler)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    veriler = {}
+    veriler["durum"] = False
+    veriler["mesaj"] = "Yol bulunamadi!"
+    return veriler
 
 
 app.run()
