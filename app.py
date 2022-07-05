@@ -722,12 +722,10 @@ def sirketSil():
         if(yetki):
             im = get_db().cursor()
             im.execute("""SELECT * FROM sigortaSirketleri WHERE id = '%s'"""%(sigortaSirketiId))
-            bilgiler = im.fetchone()
-            if(not bilgiler):
+            if(im.fetchone()):
                 veriler["durum"] = False
                 veriler["mesaj"] = "Sirket bulunamadi!"
             else:
-                os.remove("./fotograflar/" + bilgiler["fotografYolu"])
                 im.execute("""DELETE FROM sigortaSirketleri WHERE id = '%s'"""%(sigortaSirketiId))
                 get_db().commit()
                 veriler["durum"] = True
