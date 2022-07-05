@@ -626,7 +626,7 @@ def bransSil():
 def sirketEkle():
     erisimKodu = request.json["erisimKodu"]
     sigortaSirketiAdi = request.json["sigortaSirketiAdi"]
-    fotografYolu = request.json["fotografYolu"]
+    fotograf = request.json["fotograf"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -639,20 +639,13 @@ def sirketEkle():
                 veriler["durum"] = False
                 veriler["mesaj"] = "Sirket adi baska bir sirket tarafindan kullanilmakta!"
             else:
-                dosyaTuru = os.path.splitext(fotografYolu)[1]
-                if(dosyaTuru == ".png" or dosyaTuru == ".jpeg" or dosyaTuru == ".jpg"):
-                    yeniDosyaAdi = str(uuid.uuid4()) + dosyaTuru
-                    shutil.copyfile(fotografYolu, './fotograflar/' + yeniDosyaAdi)
-                    im.execute("""INSERT INTO sigortaSirketleri (ad, fotografYolu) VALUES ('%s', '%s')"""%(sigortaSirketiAdi, yeniDosyaAdi))
-                    get_db().commit()
-                    im.execute("""SELECT id FROM sigortaSirketleri WHERE ad = '%s'"""%(sigortaSirketiAdi))
-                    sigortaSirketiId = im.fetchone()
-                    veriler["durum"] = True
-                    veriler["mesaj"] = "Basarili sekilde sirket eklendi!"
-                    veriler["sigortaSirketiId"] = sigortaSirketiId["id"]
-                else:
-                    veriler["durum"] = False
-                    veriler["mesaj"] = "Dosya turu gecersiz!"
+                im.execute("""INSERT INTO sigortaSirketleri (ad, fotograf) VALUES ('%s', '%s')"""%(sigortaSirketiAdi, fotograf))
+                get_db().commit()
+                im.execute("""SELECT id FROM sigortaSirketleri WHERE ad = '%s'"""%(sigortaSirketiAdi))
+                sigortaSirketiId = im.fetchone()
+                veriler["durum"] = True
+                veriler["mesaj"] = "Basarili sekilde sirket eklendi!"
+                veriler["sigortaSirketiId"] = sigortaSirketiId["id"]
         else:
             veriler["durum"] = False
             veriler["mesaj"] = "Sirket eklemek icin yetkiniz bulunmuyor!"
@@ -693,7 +686,7 @@ def sirketGuncelle():
     erisimKodu = request.json["erisimKodu"]
     sigortaSirketiId = request.json["sigortaSirketiId"]
     sigortaSirketiAdi = request.json["sigortaSirketiAdi"]
-    fotografYolu = request.json["fotografYolu"]
+    fotograf = request.json["fotograf"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -706,20 +699,10 @@ def sirketGuncelle():
                 veriler["durum"] = False
                 veriler["mesaj"] = "Sirket adi baska bir sirket tarafindan kullanilmakta!"
             else:
-                dosyaTuru = os.path.splitext(fotografYolu)[1]
-                if(dosyaTuru == ".png" or dosyaTuru == ".jpeg" or dosyaTuru == ".jpg"):
-                    yeniDosyaAdi = str(uuid.uuid4()) + dosyaTuru
-                    shutil.copyfile(fotografYolu, './fotograflar/' + yeniDosyaAdi)
-                    im.execute("""SELECT * FROM sigortaSirketleri WHERE id = '%s'"""%(sigortaSirketiId))
-                    bilgi = im.fetchone()
-                    os.remove("./fotograflar/" + bilgi["fotografYolu"])
-                    im.execute("""UPDATE sigortaSirketleri SET ad = '%s', fotografYolu = '%s' WHERE id = '%s'"""%(sigortaSirketiAdi, yeniDosyaAdi, sigortaSirketiId))
-                    get_db().commit()
-                    veriler["durum"] = True
-                    veriler["mesaj"] = "Basarili sekilde sirket guncellendi!"
-                else:
-                    veriler["durum"] = False
-                    veriler["mesaj"] = "Dosya turu gecersiz!"
+                im.execute("""UPDATE sigortaSirketleri SET ad = '%s', fotograf = '%s' WHERE id = '%s'"""%(sigortaSirketiAdi, fotograf, sigortaSirketiId))
+                get_db().commit()
+                veriler["durum"] = True
+                veriler["mesaj"] = "Basarili sekilde sirket guncellendi!"
         else:
             veriler["durum"] = False
             veriler["mesaj"] = "Sirket guncellemek icin yetkiniz bulunmuyor!"

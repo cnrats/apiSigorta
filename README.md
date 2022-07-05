@@ -43,7 +43,7 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 **sigortaSirketleri**
 - id (int)
 - ad (text)
-- fotografYolu (text)
+- fotograf (blob)
 
 **musteriler**
 - id (int)
@@ -153,13 +153,13 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 - erisimKodu, bransId => durum, mesaj;
 
 **/sirket/ekle/ (Tamamlandi)**
-- erisimKodu, sigortaSirketiAdi, fotografYolu => durum, mesaj, sigortaSirketiId;
+- erisimKodu, sigortaSirketiAdi, fotograf => durum, mesaj, sigortaSirketiId;
 
 **/sirket/goster/hepsi/ (Tamamlandi)**
-- erisimKodu => durum, mesaj, sigortaSirketiId, sigortaSirketiAdi, fotografYolu;
+- erisimKodu => durum, mesaj, sigortaSirketiId, sigortaSirketiAdi, fotograf;
 
 **/sirket/guncelle/ (Tamamlandi)**
-- erisimKodu, sigortaSirketiAdi, sigortaSirketiId, fotografYolu => durum, mesaj;
+- erisimKodu, sigortaSirketiAdi, sigortaSirketiId, fotograf => durum, mesaj;
 
 **/sirket/sil/ (Tamamlandi)**
 - erisimKodu, sigortaSirketiId => durum, mesaj;
