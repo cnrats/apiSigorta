@@ -1043,7 +1043,7 @@ def isBireyselGuncelle():
 @cross_origin(supports_credentials = True)
 def isBireyselSil():
     erisimKodu = request.json["erisimKodu"]
-    isId = request.json["musteriId"]
+    isId = request.json["isId"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
