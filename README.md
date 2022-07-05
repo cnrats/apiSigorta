@@ -241,3 +241,6 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 
 **/verecekler/sil/**
 - erisimKodu, alacakId = durum, mesaj;
+
+**/teklif/**
+- erisimKodu, ad, soyad, ustBilgi, altBilgi, 

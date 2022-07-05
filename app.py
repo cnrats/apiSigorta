@@ -722,7 +722,7 @@ def sirketSil():
         if(yetki):
             im = get_db().cursor()
             im.execute("""SELECT * FROM sigortaSirketleri WHERE id = '%s'"""%(sigortaSirketiId))
-            if(im.fetchone()):
+            if(not im.fetchone()):
                 veriler["durum"] = False
                 veriler["mesaj"] = "Sirket bulunamadi!"
             else:
