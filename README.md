@@ -240,7 +240,10 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 - erisimKodu, alacakId, miktar, aciklama, tarih => durum, mesaj;
 
 **/verecekler/sil/**
-- erisimKodu, alacakId = durum, mesaj;
+- erisimKodu, alacakId => durum, mesaj;
+
+**/toplam/**
+- erisimKodu, isId => toplamTutar;
 
 **/teklif/**
 - erisimKodu, ad, soyad, ustBilgi, altBilgi, 

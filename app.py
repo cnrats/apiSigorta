@@ -1498,6 +1498,33 @@ def vereceklerSil():
         veriler["mesaj"] = "Oturum gecersiz!"
     return jsonify(veriler)
 
+@app.route('/toplam/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
+def toplam():
+    erisimKodu = request.json["erisimKodu"]
+    isId = request.json["isId"]
+
+    im = get_db().cursor()
+    im.execute("""SELECT miktar FROM alacaklar WHERE isId = '%s'"""%(isId))
+    alacaklar = im.fetchall()
+
+    im.execute("""SELECT miktar FROM verecekler WHERE isId = '%s'"""%(isId))
+    verecekler = im.fetchall()
+
+    toplam = 0
+    for veri in alacaklar:
+        toplam += int(veri["miktar"])
+
+    for veri in verecekler:
+        toplam -= int(veri["miktar"])
+
+    toplamVeri = {}
+    toplamVeri["durum"] = True
+    toplamVeri["mesaj"] = "Toplam basariyla hesaplandi."
+    toplamVeri["toplamTutar"] = toplam
+
+    return jsonify(toplamVeri)
+
 @app.errorhandler(404)
 def page_not_found(e):
     veriler = {}
