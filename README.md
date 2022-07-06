@@ -242,8 +242,11 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 **/verecekler/sil/**
 - erisimKodu, alacakId => durum, mesaj;
 
-**/toplam/**
+**/borc/ (Müşterinin işte kalan borcunu hesaplar.)**
 - erisimKodu, isId => toplamTutar;
+
+**/pay/ (Sadece ortak işler üzerinde, alacak payları hesaplar.)**
+- erisimKodu, isId => bireyselAlacak, firmaAlacak; 
 
 **/teklif/**
 - erisimKodu, ad, soyad, ustBilgi, altBilgi, 

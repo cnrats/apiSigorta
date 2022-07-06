@@ -1498,32 +1498,80 @@ def vereceklerSil():
         veriler["mesaj"] = "Oturum gecersiz!"
     return jsonify(veriler)
 
-@app.route('/toplam/', methods = ["POST"])
+@app.route('/borc/', methods = ["POST"])
 @cross_origin(supports_credentials = True)
-def toplam():
+def borc():
     erisimKodu = request.json["erisimKodu"]
     isId = request.json["isId"]
 
-    im = get_db().cursor()
-    im.execute("""SELECT miktar FROM alacaklar WHERE isId = '%s'"""%(isId))
-    alacaklar = im.fetchall()
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "vereceklerDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT miktar FROM alacaklar WHERE isId = '%s'"""%(isId))
+            alacaklar = im.fetchall()
 
-    im.execute("""SELECT miktar FROM verecekler WHERE isId = '%s'"""%(isId))
-    verecekler = im.fetchall()
+            im.execute("""SELECT miktar FROM verecekler WHERE isId = '%s'"""%(isId))
+            verecekler = im.fetchall()
 
-    toplam = 0
-    for veri in alacaklar:
-        toplam += int(veri["miktar"])
+            toplam = 0
+            for veri in alacaklar:
+                toplam += int(veri["miktar"])
 
-    for veri in verecekler:
-        toplam -= int(veri["miktar"])
+            for veri in verecekler:
+                toplam -= int(veri["miktar"])
 
-    toplamVeri = {}
-    toplamVeri["durum"] = True
-    toplamVeri["mesaj"] = "Toplam basariyla hesaplandi."
-    toplamVeri["toplamTutar"] = toplam
+            veriler["durum"] = True
+            veriler["mesaj"] = "Toplam borc basariyla hesaplandi."
+            veriler["toplamTutar"] = toplam
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Borc goruntulemek icin yetkiniz bulunmuyor."
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
 
-    return jsonify(toplamVeri)
+@app.route('/pay/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
+def toplamBireysel():
+    erisimKodu = request.json["erisimKodu"]
+    isId = request.json["isId"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "vereceklerDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT miktar FROM alacaklar WHERE isId = '%s'"""%(isId))
+            alacaklar = im.fetchall()
+
+            toplam = 0
+            for veri in alacaklar:
+                toplam += int(veri["miktar"])
+
+            im = get_db().cursor()
+            im.execute("""SELECT komisyonOraniFirma, komisyonOraniKendisi FROM islerOrtak WHERE id = '%s'"""%(isId))
+            oranlar = im.fetchone()
+
+            bireyselAlacak = (toplam / 100) * int(oranlar["komisyonOraniKendisi"])
+            firmaAlacak = (toplam / 100) * int(oranlar["komisyonOraniFirma"])
+
+            veriler["durum"] = True
+            veriler["mesaj"] = "Pay basariyla hesaplandi."
+            veriler["bireyselAlacak"] = bireyselAlacak
+            veriler["firmaAlacak"] = firmaAlacak
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Pay goruntulemek icin yetkiniz bulunmuyor."
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+
+    return jsonify(veriler)
 
 @app.errorhandler(404)
 def page_not_found(e):
