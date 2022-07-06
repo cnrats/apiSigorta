@@ -932,7 +932,18 @@ def isBireyselGosterHepsi():
         yetki = yetkiKontrol(kid, "bireyselIslerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""SELECT * FROM islerBireysel""")
+            im.execute("""SELECT
+            islerBireysel.*,
+            musteriler.ad AS "musteriAdi",
+            branslar.ad AS "bransAdi",
+            sigortaSirketleri.ad AS "sigortaSirketiAdi",
+            arsivKlasorleri.ad AS "arsivKlasoruAdi"
+            FROM
+            islerBireysel
+            INNER JOIN musteriler ON islerBireysel.musteriId = musteriler.id
+            INNER JOIN branslar ON islerBireysel.bransId = branslar.id
+            INNER JOIN sigortaSirketleri ON islerBireysel.sigortaSirketiId = sigortaSirketleri.id
+            INNER JOIN arsivKlasorleri ON islerBireysel.arsivId = arsivKlasorleri.id""")
             veriler = im.fetchall()
             veri = {}
             veri["durum"] = True
@@ -959,7 +970,18 @@ def isBireyselMusteriGosterHepsi():
         yetki = yetkiKontrol(kid, "bireyselIslerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""SELECT * FROM islerBireysel WHERE musteriId = '%s'"""%(musteriId))
+            im.execute("""SELECT
+islerBireysel.*,
+musteriler.ad AS "musteriAdi",
+branslar.ad AS "bransAdi",
+sigortaSirketleri.ad AS "sigortaSirketiAdi",
+arsivKlasorleri.ad AS "arsivKlasoruAdi"
+FROM
+islerBireysel
+INNER JOIN musteriler ON islerBireysel.musteriId = musteriler.id
+INNER JOIN branslar ON islerBireysel.bransId = branslar.id
+INNER JOIN sigortaSirketleri ON islerBireysel.sigortaSirketiId = sigortaSirketleri.id
+INNER JOIN arsivKlasorleri ON islerBireysel.arsivId = arsivKlasorleri.id WHERE islerBireysel.musteriId = '%s'"""%(musteriId))
             veriler = im.fetchall()
             veri = {}
             veri["durum"] = True
@@ -986,7 +1008,18 @@ def isBireyselArsivGosterHepsi():
         yetki = yetkiKontrol(kid, "bireyselIslerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""SELECT * FROM islerBireysel WHERE arsivId = '%s'"""%(arsivId))
+            im.execute("""SELECT
+islerBireysel.*,
+musteriler.ad AS "musteriAdi",
+branslar.ad AS "bransAdi",
+sigortaSirketleri.ad AS "sigortaSirketiAdi",
+arsivKlasorleri.ad AS "arsivKlasoruAdi"
+FROM
+islerBireysel
+INNER JOIN musteriler ON islerBireysel.musteriId = musteriler.id
+INNER JOIN branslar ON islerBireysel.bransId = branslar.id
+INNER JOIN sigortaSirketleri ON islerBireysel.sigortaSirketiId = sigortaSirketleri.id
+INNER JOIN arsivKlasorleri ON islerBireysel.arsivId = arsivKlasorleri.id WHERE arsivId = '%s'"""%(arsivId))
             veriler = im.fetchall()
             veri = {}
             veri["durum"] = True
@@ -1113,7 +1146,20 @@ def isOrtakGosterHepsi():
         yetki = yetkiKontrol(kid, "bireyselIslerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""SELECT * FROM islerOrtak""")
+            im.execute("""SELECT
+islerOrtak.*,
+musteriler.ad AS "musteriAdi",
+branslar.ad AS "bransAdi",
+sigortaSirketleri.ad AS "sigortaSirketiAdi",
+arsivKlasorleri.ad AS "arsivKlasoruAdi",
+firmalar.ad AS "firmaAdi"
+FROM
+islerOrtak
+INNER JOIN musteriler ON islerOrtak.musteriId = musteriler.id
+INNER JOIN branslar ON islerOrtak.bransId = branslar.id
+INNER JOIN sigortaSirketleri ON islerOrtak.sigortaSirketiId = sigortaSirketleri.id
+INNER JOIN arsivKlasorleri ON islerOrtak.arsivId = arsivKlasorleri.id
+INNER JOIN firmalar ON islerOrtak.firmaId = firmalar.id""")
             veriler = im.fetchall()
             veri = {}
             veri["durum"] = True
@@ -1140,7 +1186,20 @@ def isOrtakMusteriGosterHepsi():
         yetki = yetkiKontrol(kid, "ortakIslerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""SELECT * FROM islerOrtak WHERE musteriId = '%s'"""%(musteriId))
+            im.execute("""SELECT
+islerOrtak.*,
+musteriler.ad AS "musteriAdi",
+branslar.ad AS "bransAdi",
+sigortaSirketleri.ad AS "sigortaSirketiAdi",
+arsivKlasorleri.ad AS "arsivKlasoruAdi",
+firmalar.ad AS "firmaAdi"
+FROM
+islerOrtak
+INNER JOIN musteriler ON islerOrtak.musteriId = musteriler.id
+INNER JOIN branslar ON islerOrtak.bransId = branslar.id
+INNER JOIN sigortaSirketleri ON islerOrtak.sigortaSirketiId = sigortaSirketleri.id
+INNER JOIN arsivKlasorleri ON islerOrtak.arsivId = arsivKlasorleri.id
+INNER JOIN firmalar ON islerOrtak.firmaId = firmalar.id WHERE musteriId = '%s'"""%(musteriId))
             veriler = im.fetchall()
             veri = {}
             veri["durum"] = True
@@ -1167,7 +1226,20 @@ def isOrtakArsivGosterHepsi():
         yetki = yetkiKontrol(kid, "ortakIslerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""SELECT * FROM islerOrtak WHERE arsivId = '%s'"""%(arsivId))
+            im.execute("""SELECT
+islerOrtak.*,
+musteriler.ad AS "musteriAdi",
+branslar.ad AS "bransAdi",
+sigortaSirketleri.ad AS "sigortaSirketiAdi",
+arsivKlasorleri.ad AS "arsivKlasoruAdi",
+firmalar.ad AS "firmaAdi"
+FROM
+islerOrtak
+INNER JOIN musteriler ON islerOrtak.musteriId = musteriler.id
+INNER JOIN branslar ON islerOrtak.bransId = branslar.id
+INNER JOIN sigortaSirketleri ON islerOrtak.sigortaSirketiId = sigortaSirketleri.id
+INNER JOIN arsivKlasorleri ON islerOrtak.arsivId = arsivKlasorleri.id
+INNER JOIN firmalar ON islerOrtak.firmaId = firmalar.id WHERE arsivId = '%s'"""%(arsivId))
             veriler = im.fetchall()
             veri = {}
             veri["durum"] = True
@@ -1194,7 +1266,20 @@ def isOrtakFirmaGosterHepsi():
         yetki = yetkiKontrol(kid, "ortakIslerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""SELECT * FROM islerOrtak WHERE firmaId = '%s'"""%(firmaId))
+            im.execute("""SELECT
+islerOrtak.*,
+musteriler.ad AS "musteriAdi",
+branslar.ad AS "bransAdi",
+sigortaSirketleri.ad AS "sigortaSirketiAdi",
+arsivKlasorleri.ad AS "arsivKlasoruAdi",
+firmalar.ad AS "firmaAdi"
+FROM
+islerOrtak
+INNER JOIN musteriler ON islerOrtak.musteriId = musteriler.id
+INNER JOIN branslar ON islerOrtak.bransId = branslar.id
+INNER JOIN sigortaSirketleri ON islerOrtak.sigortaSirketiId = sigortaSirketleri.id
+INNER JOIN arsivKlasorleri ON islerOrtak.arsivId = arsivKlasorleri.id
+INNER JOIN firmalar ON islerOrtak.firmaId = firmalar.id WHERE firmaId = '%s'"""%(firmaId))
             veriler = im.fetchall()
             veri = {}
             veri["durum"] = True

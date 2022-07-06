@@ -183,13 +183,13 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 - erisimKodu, musteriId, bransId, sigortaSirketiId, arsivId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi => durum, mesaj, isId;
 
 **/is/bireysel/goster/hepsi/**
-- erisimKodu => durum, mesaj, musteriId, bransId, sigortaSirketiId, arsivId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi;
+- erisimKodu => durum, mesaj, musteriId, bransId, sigortaSirketiId, arsivId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi, bransAdi, sigortaSirketiAdi, arsivKlasoruAdi, musteriAdi;
 
 **/is/bireysel/musteri/goster/hepsi/**
-- erisimKodu, musteriId => durum, mesaj, bransId, sigortaSirketiId, arsivId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi;
+- erisimKodu, musteriId => durum, mesaj, bransId, sigortaSirketiId, arsivId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi, bransAdi, sigortaSirketiAdi, arsivKlasoruAdi, musteriAdi;
 
 **/is/bireysel/arsiv/goster/hepsi/**
-- erisimKodu, arsivId => durum, mesaj, bransId, sigortaSirketiId, musteriId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi;
+- erisimKodu, arsivId => durum, mesaj, bransId, sigortaSirketiId, musteriId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi, bransAdi, sigortaSirketiAdi, arsivKlasoruAdi, musteriAdi;
 
 **/is/bireysel/guncelle/**
 - erisimKodu, isId, musteriId, bransId, sigortaSirketiId, arsivId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi => durum, mesaj;
@@ -201,16 +201,16 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 - erisimKodu, musteriId, bransId, sigortaSirketiId, arsivId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi => durum, mesaj, isId;
 
 **/is/ortak/goster/hepsi/**
-- erisimKodu => durum, mesaj, musteriId, bransId, sigortaSirketiId, arsivId, plaka, firmaId, komisyonOraniKendisi, komisyonOraniFirma, ruhsatSeriNo, policeNo, policeBitisTarihi;
+- erisimKodu => durum, mesaj, musteriId, bransId, sigortaSirketiId, arsivId, plaka, firmaId, komisyonOraniKendisi, komisyonOraniFirma, ruhsatSeriNo, policeNo, policeBitisTarihi, bransAdi, sigortaSirketiAdi, arsivKlasoruAdi, firmaAdi, musteriAdi;
 
 **/is/ortak/musteri/goster/hepsi/**
-- erisimKodu, musteriId => durum, mesaj, bransId, sigortaSirketiId, arsivId, firmaId, komisyonOraniKendisi, komisyonOraniFirma, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi;
+- erisimKodu, musteriId => durum, mesaj, bransId, sigortaSirketiId, arsivId, firmaId, komisyonOraniKendisi, komisyonOraniFirma, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi, bransAdi, sigortaSirketiAdi, arsivKlasoruAdi, firmaAdi, musteriAdi;
 
 **/is/ortak/arsiv/goster/hepsi/**
-- erisimKodu, arsivId => durum, mesaj, bransId, sigortaSirketiId, musteriId, firmaId, komisyonOraniKendisi, komisyonOraniFirma, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi;
+- erisimKodu, arsivId => durum, mesaj, bransId, sigortaSirketiId, musteriId, firmaId, komisyonOraniKendisi, komisyonOraniFirma, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi, bransAdi, sigortaSirketiAdi, arsivKlasoruAdi, firmaAdi, musteriAdi;
 
 **/is/ortak/firma/goster/hepsi/**
-- erisimKodu, firmaId => durum, mesaj, bransId, sigortaSirketiId, arsivId, musteriId, komisyonOraniKendisi, komisyonOraniFirma, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi;
+- erisimKodu, firmaId => durum, mesaj, bransId, sigortaSirketiId, arsivId, musteriId, komisyonOraniKendisi, komisyonOraniFirma, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi, bransAdi, sigortaSirketiAdi, arsivKlasoruAdi, firmaAdi, musteriAdi;
 
 **/is/ortak/guncelle/**
 - erisimKodu, isId, musteriId, bransId, sigortaSirketiId, arsivId, firmaId, komisyonOraniKendisi, komisyonOraniFirma, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi => durum, mesaj;
@@ -248,5 +248,5 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 **/pay/ (Sadece ortak işler üzerinde, alacak payları hesaplar.)**
 - erisimKodu, isId => bireyselAlacak, firmaAlacak; 
 
-**/teklif/**
+**/teklif/ (Yapım aşamasında.)**
 - erisimKodu, ad, soyad, ustBilgi, altBilgi, 
