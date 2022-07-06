@@ -85,6 +85,7 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 - miktar (int)
 - aciklama (text)
 - tarih (text)
+- isTuru (int)
 
 **verecekler**
 - id (int)
@@ -92,6 +93,7 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 - miktar (int)
 - aciklama (text)
 - tarih (text)
+- isTuru (int)
 
 ## Api Kullanım Kılavuzu
 ### Kullanıcı Denetimi
@@ -219,10 +221,10 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 - erisimKodu, isId => durum, mesaj;
 
 **/alacaklar/ekle/**
-- erisimKodu, isId, miktar, aciklama, tarih => durum, mesaj;
+- erisimKodu, isId, miktar, aciklama, tarih, isTuru => durum, mesaj;
 
 **/alacaklar/goster/**
-- erisimKodu, isId => durum, mesaj, miktar, aciklama, tarih;
+- erisimKodu, isId, isTuru => durum, mesaj, miktar, aciklama, tarih;
 
 **/alacaklar/guncelle/**
 - erisimKodu, alacakId, miktar, aciklama, tarih => durum, mesaj;
@@ -231,10 +233,10 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 - erisimKodu, alacakId = durum, mesaj;
 
 **/verecekler/ekle/**
-- erisimKodu, isId, miktar, aciklama, tarih => durum, mesaj;
+- erisimKodu, isId, miktar, aciklama, tarih, isTuru => durum, mesaj;
 
 **/verecekler/goster/**
-- erisimKodu, isId => durum, mesaj, miktar, aciklama, tarih;
+- erisimKodu, isId, isTuru => durum, mesaj, miktar, aciklama, tarih;
 
 **/verecekler/guncelle/**
 - erisimKodu, alacakId, miktar, aciklama, tarih => durum, mesaj;
@@ -243,10 +245,10 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 - erisimKodu, alacakId => durum, mesaj;
 
 **/borc/ (Müşterinin işte kalan borcunu hesaplar.)**
-- erisimKodu, isId => toplamTutar;
+- erisimKodu, isId, isTuru => toplamTutar;
 
 **/pay/ (Sadece ortak işler üzerinde, alacak payları hesaplar.)**
-- erisimKodu, isId => bireyselAlacak, firmaAlacak; 
+- erisimKodu, isId, isTuru => bireyselAlacak, firmaAlacak; 
 
 **/teklif/kasko/ (Yapım aşamasında.)**
 - erisimKodu, ad, soyad, ustBilgi, altBilgi, 

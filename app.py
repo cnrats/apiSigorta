@@ -1371,6 +1371,7 @@ def alacaklarEkle():
     miktar = request.json["miktar"]
     aciklama = request.json["aciklama"]
     tarih = request.json["tarih"]
+    isTuru = request.json["isTuru"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -1378,7 +1379,7 @@ def alacaklarEkle():
         yetki = yetkiKontrol(kid, "alacaklarDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""INSERT INTO alacaklar (isId, miktar, aciklama, tarih) VALUES ('%s', '%s', '%s', '%s')"""%(isId, miktar, aciklama, tarih))
+            im.execute("""INSERT INTO alacaklar (isId, miktar, aciklama, tarih, isTuru) VALUES ('%s', '%s', '%s', '%s', '%s')"""%(isId, miktar, aciklama, tarih, isTuru))
             get_db().commit()
             veriler["durum"] = True
             veriler["mesaj"] = "Basarili sekilde alacak eklendi!"
@@ -1396,13 +1397,14 @@ def alacakGoster():
     erisimKodu = request.json["erisimKodu"]
     kid = oturumKontrol(erisimKodu)
     isId = request.json["isId"]
+    isTuru = request.json["isTuru"]
     veriler = {}
 
     if(kid):
         yetki = yetkiKontrol(kid, "alacaklarDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""SELECT * FROM alacaklar WHERE isId = '%s'"""%(isId))
+            im.execute("""SELECT * FROM alacaklar WHERE isId = '%s' AND isTuru = '%s'"""%(isId, isTuru))
             veriler = im.fetchall()
             veri = {}
             veri["durum"] = True
@@ -1478,6 +1480,7 @@ def alacaklarSil():
 def vereceklerEkle():
     erisimKodu = request.json["erisimKodu"]
     isId = request.json["isId"]
+    isTuru = request.json["isTuru"]
     miktar = request.json["miktar"]
     aciklama = request.json["aciklama"]
     tarih = request.json["tarih"]
@@ -1488,7 +1491,7 @@ def vereceklerEkle():
         yetki = yetkiKontrol(kid, "vereceklerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""INSERT INTO verecekler (isId, miktar, aciklama, tarih) VALUES ('%s', '%s', '%s', '%s')"""%(isId, miktar, aciklama, tarih))
+            im.execute("""INSERT INTO verecekler (isId, miktar, aciklama, tarih, isTuru) VALUES ('%s', '%s', '%s', '%s', '%s')"""%(isId, miktar, aciklama, tarih, isTuru))
             get_db().commit()
             veriler["durum"] = True
             veriler["mesaj"] = "Basarili sekilde verecek eklendi!"
@@ -1506,13 +1509,14 @@ def vereceklerGoster():
     erisimKodu = request.json["erisimKodu"]
     kid = oturumKontrol(erisimKodu)
     isId = request.json["isId"]
+    isTuru = request.json["isTuru"]
     veriler = {}
 
     if(kid):
         yetki = yetkiKontrol(kid, "vereceklerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""SELECT * FROM verecekler WHERE isId = '%s'"""%(isId))
+            im.execute("""SELECT * FROM verecekler WHERE isId = '%s' AND isTuru = '%s'"""%(isId, isTuru))
             veriler = im.fetchall()
             veri = {}
             veri["durum"] = True
@@ -1588,6 +1592,7 @@ def vereceklerSil():
 def borc():
     erisimKodu = request.json["erisimKodu"]
     isId = request.json["isId"]
+    isTuru = request.json["isTuru"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -1595,10 +1600,10 @@ def borc():
         yetki = yetkiKontrol(kid, "vereceklerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""SELECT miktar FROM alacaklar WHERE isId = '%s'"""%(isId))
+            im.execute("""SELECT miktar FROM alacaklar WHERE isId = '%s' AND isTuru = '%s'"""%(isId, isTuru))
             alacaklar = im.fetchall()
 
-            im.execute("""SELECT miktar FROM verecekler WHERE isId = '%s'"""%(isId))
+            im.execute("""SELECT miktar FROM verecekler WHERE isId = '%s' AND isTuru = '%s'"""%(isId, isTuru))
             verecekler = im.fetchall()
 
             toplam = 0
@@ -1624,6 +1629,7 @@ def borc():
 def toplamBireysel():
     erisimKodu = request.json["erisimKodu"]
     isId = request.json["isId"]
+    isTuru = request.json["isTuru"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -1631,7 +1637,7 @@ def toplamBireysel():
         yetki = yetkiKontrol(kid, "vereceklerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""SELECT miktar FROM alacaklar WHERE isId = '%s'"""%(isId))
+            im.execute("""SELECT miktar FROM alacaklar WHERE isId = '%s' AND isTuru = '%s'"""%(isId, isTuru))
             alacaklar = im.fetchall()
 
             toplam = 0
