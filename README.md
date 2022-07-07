@@ -173,7 +173,7 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 - erisimKodu => durum, mesaj, musteriId, musteriAdi, musteriSoyadi, musteriTelefon, musteriTc;
 
 **/musteri/goster/tek/ (Tamamlandi)**
-- erisimKodu => durum, mesaj, musteriId,musteriAdi, musteriSoyadi, musteriTc, musteriDogumTarihi, musteriTelefon, musteriMailAdresi;
+- erisimKodu, musteriId  => durum, mesaj, musteriId,musteriAdi, musteriSoyadi, musteriTc, musteriDogumTarihi, musteriTelefon, musteriMailAdresi;
 
 **/musteri/guncelle/ (Tamamlandi)**
 - erisimKodu, musteriId,musteriAdi, musteriSoyadi, musteriTc, musteriDogumTarihi, musteriTelefon, musteriMailAdresi => durum, mesaj;
