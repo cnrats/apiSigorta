@@ -1718,7 +1718,7 @@ def gosterHepsi():
             musteriler = im.fetchall()
 
             im.execute("SELECT * FROM oturumlar")
-            alacaklar = im.fetchall()
+            oturumlar = im.fetchall()
 
             im.execute("SELECT * FROM sigortaSirketleri")
             sigortaSirketleri = im.fetchall()
@@ -1735,7 +1735,7 @@ def gosterHepsi():
             veriler["kullaniciYetkileri"] = kullaniciYetkileri
             veriler["kullanicilar"] = kullanicilar
             veriler["musteriler"] = musteriler
-            veriler["alacaklar"] = alacaklar
+            veriler["oturumlar"] = oturumlar
             veriler["sigortaSirketleri"] = sigortaSirketleri
             veriler["verecekler"] = verecekler
             veriler["durum"] = True
