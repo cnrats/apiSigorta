@@ -1008,7 +1008,21 @@ def isBireyselArsivGosterHepsi():
         yetki = yetkiKontrol(kid, "bireyselIslerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""SELECT
+            if(arsivId == 0):
+                im.execute("""SELECT
+islerBireysel.*,
+musteriler.ad AS "musteriAdi",
+branslar.ad AS "bransAdi",
+sigortaSirketleri.ad AS "sigortaSirketiAdi",
+arsivKlasorleri.ad AS "arsivKlasoruAdi"
+FROM
+islerBireysel
+INNER JOIN musteriler ON islerBireysel.musteriId = musteriler.id
+INNER JOIN branslar ON islerBireysel.bransId = branslar.id
+INNER JOIN sigortaSirketleri ON islerBireysel.sigortaSirketiId = sigortaSirketleri.id
+INNER JOIN arsivKlasorleri ON islerBireysel.arsivId = arsivKlasorleri.id""")
+            else:
+                im.execute("""SELECT
 islerBireysel.*,
 musteriler.ad AS "musteriAdi",
 branslar.ad AS "bransAdi",
@@ -1020,6 +1034,7 @@ INNER JOIN musteriler ON islerBireysel.musteriId = musteriler.id
 INNER JOIN branslar ON islerBireysel.bransId = branslar.id
 INNER JOIN sigortaSirketleri ON islerBireysel.sigortaSirketiId = sigortaSirketleri.id
 INNER JOIN arsivKlasorleri ON islerBireysel.arsivId = arsivKlasorleri.id WHERE arsivId = '%s'"""%(arsivId))
+            
             veriler = im.fetchall()
             veri = {}
             veri["durum"] = True
@@ -1626,10 +1641,9 @@ def borc():
 
 @app.route('/pay/', methods = ["POST"])
 @cross_origin(supports_credentials = True)
-def toplamBireysel():
+def pay():
     erisimKodu = request.json["erisimKodu"]
     isId = request.json["isId"]
-    isTuru = request.json["isTuru"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
@@ -1637,7 +1651,7 @@ def toplamBireysel():
         yetki = yetkiKontrol(kid, "vereceklerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""SELECT miktar FROM alacaklar WHERE isId = '%s' AND isTuru = '%s'"""%(isId, isTuru))
+            im.execute("""SELECT miktar FROM alacaklar WHERE isId = '%s' AND isTuru = '%s'"""%(isId, 1))
             alacaklar = im.fetchall()
 
             toplam = 0
@@ -1658,6 +1672,30 @@ def toplamBireysel():
         else:
             veriler["durum"] = False
             veriler["mesaj"] = "Pay goruntulemek icin yetkiniz bulunmuyor."
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+
+    return jsonify(veriler)
+
+@app.route('/teklif/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
+def teklif():
+    erisimKodu = request.json["erisimKodu"]
+    bransId = request.json["bransId"]
+    ad = request.json["ad"]
+    soyad = request.json["soyad"]
+    ustBilgi = request.json["ustBilgi"]
+    altBilgi = request.json["altBilgi"]
+    sigortaSirketleri = request.json["sigortaSirketleri"]
+    fiyatBilgileri = request.json["fiyatBilgileri"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        im = get_db().cursor()
+        im.execute("""SELECT * FROM branslar WHERE id = '%s'"""%(bransId))
+        bransBilgileri = im.fetchone()
     else:
         veriler["durum"] = False
         veriler["mesaj"] = "Oturum gecersiz!"

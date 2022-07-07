@@ -248,7 +248,7 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 - erisimKodu, isId, isTuru(0 = Bireysel, 1 = Ortak)(0 = Bireysel, 1 = Ortak) => toplamTutar;
 
 **/pay/ (Sadece ortak işler üzerinde, alacak payları hesaplar.)**
-- erisimKodu, isId, isTuru(0 = Bireysel, 1 = Ortak) => bireyselAlacak, firmaAlacak; 
+- erisimKodu, isId => bireyselAlacak, firmaAlacak; 
 
-**/teklif/kasko/ (Yapım aşamasında.)**
-- erisimKodu, ad, soyad, ustBilgi, altBilgi, 
+**/teklif/**
+- erisimKodu, bransId, ad, soyad, ustBilgi, altBilgi, sigortaSirketleri, fiyatBilgileri => url;
