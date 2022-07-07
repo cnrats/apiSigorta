@@ -250,5 +250,8 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 **/pay/ (Sadece ortak işler üzerinde, alacak payları hesaplar.)**
 - erisimKodu, isId => bireyselAlacak, firmaAlacak; 
 
+**/goster/hepsi/**
+-erisimKodu => (Tüm veriler.)
+
 **/teklif/**
 - erisimKodu, bransId, ad, soyad, ustBilgi, altBilgi, sigortaSirketleri, fiyatBilgileri => url;

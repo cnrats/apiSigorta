@@ -1678,6 +1678,77 @@ def pay():
 
     return jsonify(veriler)
 
+@app.route('/goster/hepsi/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
+def gosterHepsi():
+    erisimKodu = request.json["erisimKodu"]
+
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "kayitlarGoruntule")
+        if(yetki):
+            im = get_db().cursor()
+            
+            im.execute("SELECT * FROM alacaklar")
+            alacaklar = im.fetchall()
+
+            im.execute("SELECT * FROM arsivKlasorleri")
+            arsivKlasorleri = im.fetchall()
+
+            im.execute("SELECT * FROM branslar")
+            branslar = im.fetchall()
+
+            im.execute("SELECT * FROM firmalar")
+            firmalar = im.fetchall()
+
+            im.execute("SELECT * FROM islerBireysel")
+            islerBireysel = im.fetchall()
+
+            im.execute("SELECT * FROM islerOrtak")
+            islerOrtak = im.fetchall()
+
+            im.execute("SELECT * FROM kullaniciYetkileri")
+            kullaniciYetkileri = im.fetchall()
+
+            im.execute("SELECT * FROM kullanicilar")
+            kullanicilar = im.fetchall()
+
+            im.execute("SELECT * FROM musteriler")
+            musteriler = im.fetchall()
+
+            im.execute("SELECT * FROM oturumlar")
+            alacaklar = im.fetchall()
+
+            im.execute("SELECT * FROM sigortaSirketleri")
+            sigortaSirketleri = im.fetchall()
+
+            im.execute("SELECT * FROM verecekler")
+            verecekler = im.fetchall()
+
+            veriler["alacaklar"] = alacaklar
+            veriler["arsivKlasorleri"] = arsivKlasorleri
+            veriler["branslar"] = branslar
+            veriler["firmalar"] = firmalar
+            veriler["islerBireysel"] = islerBireysel
+            veriler["islerOrtak"] = islerOrtak
+            veriler["kullaniciYetkileri"] = kullaniciYetkileri
+            veriler["kullanicilar"] = kullanicilar
+            veriler["musteriler"] = musteriler
+            veriler["alacaklar"] = alacaklar
+            veriler["sigortaSirketleri"] = sigortaSirketleri
+            veriler["verecekler"] = verecekler
+            veriler["durum"] = True
+            veriler["mesaj"] = "Tum veriler basariyla listelendi."
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Islem icin yetkiniz bulunmuyor."
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+
+    return jsonify(veriler)
+
 @app.route('/teklif/', methods = ["POST"])
 @cross_origin(supports_credentials = True)
 def teklif():
