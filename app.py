@@ -1,5 +1,5 @@
 import flask
-from flask import request, jsonify, g
+from flask import request, jsonify, g, render_template, url_for
 from flask_cors import CORS, cross_origin
 import sqlite3
 import uuid
@@ -1767,6 +1767,19 @@ def teklif():
         im = get_db().cursor()
         im.execute("""SELECT * FROM branslar WHERE id = '%s'"""%(bransId))
         bransBilgileri = im.fetchone()
+
+        sirketBilgileri = {}
+        j = 0
+        enDusukFiyat = fiyatBilgileri[0]
+        for i in sigortaSirketleri:
+            im.execute("""SELECT ad, fotograf from sigortaSirketleri WHERE id = '%s'"""%(i))
+            sirketBilgileri[j] = im.fetchone()
+            sirketBilgileri[j]["fiyat"] = fiyatBilgileri[j]
+            if(sirketBilgileri[j]["fiyat"] < enDusukFiyat):
+                enDusukFiyat = sirketBilgileri[j]["fiyat"]
+            j += 1
+
+        return render_template("index.html", bransBilgileri = bransBilgileri, ad = ad, soyad = soyad, ustBilgi = ustBilgi, altBilgi = altBilgi, sirketBilgileri = sirketBilgileri, enDusukFiyat = enDusukFiyat)
     else:
         veriler["durum"] = False
         veriler["mesaj"] = "Oturum gecersiz!"

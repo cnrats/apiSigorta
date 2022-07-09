@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Teklif - {{ad}} {{soyad}}</title>
+    <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-7">
+                <div class="fs-5">Sayın Caner Ateş,</div>
+                <div>
+                    {{ustBilgi}}
+                </div>
+            </div>
+            <div class="col-5">
+                <img src="{{ url_for('static', filename='logo.jpeg') }}" class="img-fluid">
+            </div>
+            <div class="col-12 my-2">
+                <hr>
+            </div>
+            <div class="col-12 text-center">
+                <div class="row">
+                    <div class="col-12 bg-primary text-light p-1 rounded">
+                        <div class="row">
+                            <div class="col-2">
+
+                            </div>
+                            <div class="col-5">
+                                Sigorta Şirketi
+                            </div>
+                            <div class="col-5">
+                                Fiyat
+                            </div>
+                        </div>
+                    </div>
+                    {%for veri in sirketBilgileri%}
+                    <div class="col-12 p-2 bg-light mt-1 rounded">
+                        <div class="row">
+                            <div class="col-2">
+                                <img src="data:image;base64,{{sirketBilgileri[veri]['fotograf']}}" class="img-fluid">
+                            </div>
+                            <div class="col-5">
+                                {{sirketBilgileri[veri]['ad']}}
+                            </div>
+                            <div class="col-5">
+                                {{sirketBilgileri[veri]['fiyat']}} TL
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="col-12 mt-2">
+                        <div class="d-grid gap-2">
+                            <div class="btn btn-success rounded">
+                                En Düşük Fiyat: {{enDusukFiyat}} TL
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 my-2">
+                <hr>
+            </div>
+            <div class="col-12">
+                {{altBilgi}}
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+</body>
+
+</html>
