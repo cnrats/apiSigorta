@@ -220,6 +220,12 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 **/is/ortak/sil/**
 - erisimKodu, isId => durum, mesaj;
 
+**/isler/bireysel/yaklasan/**
+-erisimKodu => (Tarihi yaklaşan bireysel işler)
+
+**/isler/ortak/yaklasan/**
+-erisimKodu => (Tarihi yaklaşan ortak işler)
+
 **/alacaklar/ekle/**
 - erisimKodu, isId, miktar, aciklama, tarih, isTuru(0 = Bireysel, 1 = Ortak) => durum, mesaj;
 

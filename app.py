@@ -3,6 +3,7 @@ from flask import request, jsonify, g, render_template, url_for
 from flask_cors import CORS, cross_origin
 import sqlite3
 import uuid
+import datetime
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -1373,6 +1374,90 @@ def isOrtakSil():
         else:
             veriler["durum"] = False
             veriler["mesaj"] = "Is silmek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
+
+@app.route('/is/bireysel/yaklasan/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
+def isBireyselYaklasan():
+    erisimKodu = request.json["erisimKodu"]
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "bireyselIslerDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM islerBireysel""")
+            isler = im.fetchall()
+            if(isler):
+                j = 0
+                bulunanIsler = []
+                for veri in isler:
+                    tarihSimdi = datetime.datetime.now()
+                    tarihVeri = veri["policeBitisTarihi"]
+
+                    tarihIs = datetime.datetime.strptime(tarihVeri, "%Y-%m-%d")
+                    delta = tarihIs-tarihSimdi
+                    if(int(delta.days) <= 15 and delta.days > 0):
+                        bulunanIsler.append(veri)
+                        j = j+1
+                if(j == 0):
+                    veriler["durum"] = False
+                    veriler["mesaj"] = "Yaklasan is bulunamadi!"
+                else:
+                    veriler["durum"] = True
+                    veriler["mesaj"] = "Islem basarili!"
+                    veriler["isler"] = bulunanIsler
+            else:
+                veriler["durum"] = False
+                veriler["mesaj"] = "Is bulunamadi!"
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Yaklasan isleri goruntulemek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
+
+@app.route('/is/ortak/yaklasan/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
+def isOrtakYaklasan():
+    erisimKodu = request.json["erisimKodu"]
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "ortakIslerDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT * FROM islerOrtak""")
+            isler = im.fetchall()
+            if(isler):
+                j = 0
+                bulunanIsler = []
+                for veri in isler:
+                    tarihSimdi = datetime.datetime.now()
+                    tarihVeri = veri["policeBitisTarihi"]
+
+                    tarihIs = datetime.datetime.strptime(tarihVeri, "%Y-%m-%d")
+                    delta = tarihIs-tarihSimdi
+                    if(int(delta.days) <= 15 and delta.days > 0):
+                        bulunanIsler.append(veri)
+                        j = j+1
+                if(j == 0):
+                    veriler["durum"] = False
+                    veriler["mesaj"] = "Yaklasan is bulunamadi!"
+                else:
+                    veriler["durum"] = True
+                    veriler["mesaj"] = "Islem basarili!"
+                    veriler["isler"] = bulunanIsler
+            else:
+                veriler["durum"] = False
+                veriler["mesaj"] = "Is bulunamadi!"
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Yaklasan isleri goruntulemek icin yetkiniz bulunmuyor!"
     else:
         veriler["durum"] = False
         veriler["mesaj"] = "Oturum gecersiz!"
