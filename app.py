@@ -1245,7 +1245,23 @@ def isOrtakArsivGosterHepsi():
         yetki = yetkiKontrol(kid, "ortakIslerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""SELECT
+            if(arsivId == 0):
+                im.execute("""SELECT
+islerOrtak.*,
+musteriler.ad AS "musteriAdi",
+branslar.ad AS "bransAdi",
+sigortaSirketleri.ad AS "sigortaSirketiAdi",
+arsivKlasorleri.ad AS "arsivKlasoruAdi",
+firmalar.ad AS "firmaAdi"
+FROM
+islerOrtak
+INNER JOIN musteriler ON islerOrtak.musteriId = musteriler.id
+INNER JOIN branslar ON islerOrtak.bransId = branslar.id
+INNER JOIN sigortaSirketleri ON islerOrtak.sigortaSirketiId = sigortaSirketleri.id
+INNER JOIN arsivKlasorleri ON islerOrtak.arsivId = arsivKlasorleri.id
+INNER JOIN firmalar ON islerOrtak.firmaId = firmalar.id""")
+            else:
+                im.execute("""SELECT
 islerOrtak.*,
 musteriler.ad AS "musteriAdi",
 branslar.ad AS "bransAdi",
@@ -1272,6 +1288,7 @@ INNER JOIN firmalar ON islerOrtak.firmaId = firmalar.id WHERE arsivId = '%s'"""%
         veriler["mesaj"] = "Oturum gecersiz!"
 
     return jsonify(veriler)
+
 
 @app.route('/is/ortak/firma/goster/hepsi/', methods = ['POST'])
 @cross_origin(supports_credentials = True)
