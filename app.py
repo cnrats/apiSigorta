@@ -40,6 +40,15 @@ def yetkiKontrol(kullaniciId, yetki):
         return yetkiler[yetki]
     return False
 
+@app.before_first_request
+def oturumlariBosalt():
+    with app.app_context():
+        im = get_db().cursor()
+        im.execute("SELECT * FROM oturumlar")
+        if(im.fetchone()):
+            im.execute("""DELETE FROM oturumlar""")
+            get_db().commit()
+
 @app.teardown_appcontext
 def close_connection(exception):
     db = getattr(g, '_database', None)
@@ -55,19 +64,13 @@ def kullaniciGiris():
     im.execute("""SELECT id, kullaniciAdi FROM kullanicilar WHERE kullaniciAdi='%s' AND sifre='%s'"""%(kullaniciAdi, sifre))
     veriler = im.fetchone()
     if(veriler):
-        im.execute("""SELECT * FROM oturumlar WHERE kullaniciId='%s'"""%(veriler["id"]))
-        oturumlar = im.fetchone()
-        if(oturumlar):
-            veriler = {}
-            veriler['durum'] = "false"
-            veriler['mesaj'] = "Baska bir oturum acik!"
-        else:
-            veriler['durum'] = "true"
-            veriler['mesaj'] = "Giris yapma islemi basarili!"
-            ekod = uuid.uuid4()
-            veriler['erisimKodu'] = ekod
-            im.execute("""INSERT INTO oturumlar (kullaniciId, erisimKodu, bitisTarihi) VALUES ('%s', '%s', '%s')"""%(veriler["id"], ekod, 'deneme'))
-            get_db().commit()
+        im.execute("""DELETE FROM oturumlar WHERE kullaniciId='%s'"""%(veriler["id"]))
+        veriler['durum'] = "true"
+        veriler['mesaj'] = "Giris yapma islemi basarili!"
+        ekod = uuid.uuid4()
+        veriler['erisimKodu'] = ekod
+        im.execute("""INSERT INTO oturumlar (kullaniciId, erisimKodu, bitisTarihi) VALUES ('%s', '%s', '%s')"""%(veriler["id"], ekod, datetime.datetime.now().replace(second=0, microsecond=0)))
+        get_db().commit()
     else:
         veriler = {}
         veriler['durum'] = "false"
@@ -1877,6 +1880,5 @@ def page_not_found(e):
     veriler["durum"] = False
     veriler["mesaj"] = "Yol bulunamadi!"
     return veriler
-
 
 app.run()
