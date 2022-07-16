@@ -4,6 +4,7 @@ from flask_cors import CORS, cross_origin
 import sqlite3
 import uuid
 import datetime
+import json
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -1854,17 +1855,18 @@ def gosterHepsi():
 
     return jsonify(veriler)
 
-@app.route('/teklif/', methods = ["POST"])
+@app.route('/teklif/', methods = ["GET"])
 @cross_origin(supports_credentials = True)
 def teklif():
-    erisimKodu = request.json["erisimKodu"]
-    bransId = request.json["bransId"]
-    ad = request.json["ad"]
-    soyad = request.json["soyad"]
-    ustBilgi = request.json["ustBilgi"]
-    altBilgi = request.json["altBilgi"]
-    sigortaSirketleri = request.json["sigortaSirketleri"]
-    fiyatBilgileri = request.json["fiyatBilgileri"]
+    data = json.loads(request.args.get("data"))
+    erisimKodu = data["erisimKodu"]
+    bransId = data["bransId"]
+    ad = data["ad"]
+    soyad = data["soyad"]
+    ustBilgi = data["ustBilgi"]
+    altBilgi = data["altBilgi"]
+    sigortaSirketleri = data["sigortaSirketleri"]
+    fiyatBilgileri = data["fiyatBilgileri"]
 
     kid = oturumKontrol(erisimKodu)
     veriler = {}
