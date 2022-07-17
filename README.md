@@ -118,67 +118,67 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 **/kullanici/guncelle/ (Tamamlandı)**
 - erisimKodu, kullaniciId, sifre, firmalarDuzenle, musterilerDuzenle, arsivKlasorleriDuzenle, branslarDuzenle, sigortaSirketleriDuzenle, bireyselIslerDuzenle, ortakIslerDuzenle, alacaklarDuzenle, verilenlerDuzenle, kullanicilarDuzenle, kayitlarGoruntule => durum, mesaj;
 
-**/firma/ekle/ (Tamamlandi)**
+**/firma/ekle/**
 - erisimKodu, firmaAdi => durum, mesaj, firmaId;
 
-**/firma/goster/hepsi (Tamamlandi)**
+**/firma/goster/hepsi**
 - erisimKodu => durum, mesaj, firmaId, firmaAdi;
 
-**/firma/guncelle/ (Tamamlandi)**
+**/firma/guncelle/**
 - erisimKodu, firmaId, firmaAdi => durum, mesaj;
 
-**/firma/sil/ (Tamamlandi)**
+**/firma/sil/**
 - erisimKodu, firmaId => durum, mesaj;
 
-**/arsiv/ekle/ (Tamamlandi)**
+**/arsiv/ekle/**
 - erisimKodu, arsivKlasoruAdi => durum, mesaj, arsivKlasoruId;
 
-**/arsiv/goster/hepsi (Tamamlandi)**
+**/arsiv/goster/hepsi**
 - erisimKodu => durum, mesaj, arsivKlasoruId, arsivKlasoruAdi;
 
-**/arsiv/guncelle/ (Tamamlandi)**
+**/arsiv/guncelle/**
 - erisimKodu, arsivKlasoruId, arsivKlasoruAdi => durum, mesaj;
 
-**/arsiv/sil/ (Tamamlandi)**
+**/arsiv/sil/**
 - erisimKodu, arsivKlasoruId => durum, mesaj;
 
-**/brans/ekle/ (Tamamlandi)**
+**/brans/ekle/**
 - erisimKodu, bransAdi => durum, mesaj, bransId;
 
-**/brans/goster/hepsi (Tamamlandi)**
+**/brans/goster/hepsi**
 - erisimKodu => durum, mesaj, bransId, bransAdi;
 
-**/brans/guncelle/ (Tamamlandi)**
+**/brans/guncelle/**
 - erisimKodu, bransId, bransAdi => durum, mesaj;
 
-**/brans/sil/ (Tamamlandi)**
+**/brans/sil/**
 - erisimKodu, bransId => durum, mesaj;
 
-**/sirket/ekle/ (Tamamlandi)**
+**/sirket/ekle/**
 - erisimKodu, sigortaSirketiAdi, fotograf => durum, mesaj, sigortaSirketiId;
 
-**/sirket/goster/hepsi/ (Tamamlandi)**
+**/sirket/goster/hepsi/**
 - erisimKodu => durum, mesaj, sigortaSirketiId, sigortaSirketiAdi, fotograf;
 
-**/sirket/guncelle/ (Tamamlandi)**
+**/sirket/guncelle/**
 - erisimKodu, sigortaSirketiAdi, sigortaSirketiId, fotograf => durum, mesaj;
 
-**/sirket/sil/ (Tamamlandi)**
+**/sirket/sil/**
 - erisimKodu, sigortaSirketiId => durum, mesaj;
 
-**/musteri/ekle/ (Tamamlandi)**
+**/musteri/ekle/**
 - erisimKodu, musteriAdi, musteriSoyadi, musteriTc, musteriDogumTarihi, musteriTelefon, musteriMailAdresi => durum, mesaj, musteriId;
 
-**/musteri/goster/hepsi/ (Tamamlandi)**
+**/musteri/goster/hepsi/**
 - erisimKodu => durum, mesaj, musteriId, musteriAdi, musteriSoyadi, musteriTelefon, musteriTc;
 
-**/musteri/goster/tek/ (Tamamlandi)**
+**/musteri/goster/tek/**
 - erisimKodu => durum, mesaj, musteriId,musteriAdi, musteriSoyadi, musteriTc, musteriDogumTarihi, musteriTelefon, musteriMailAdresi;
 
-**/musteri/guncelle/ (Tamamlandi)**
+**/musteri/guncelle/**
 - erisimKodu, musteriId,musteriAdi, musteriSoyadi, musteriTc, musteriDogumTarihi, musteriTelefon, musteriMailAdresi => durum, mesaj;
 
-**/musteri/sil/ (Tamamlandi)**
+**/musteri/sil/**
 - erisimKodu, musteriId => durum, mesaj;
 
 **/is/bireysel/ekle/**
@@ -224,7 +224,7 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 -erisimKodu => (Tarihi yaklaşan bireysel işler)
 
 **/isler/ortak/yaklasan/**
--erisimKodu => (Tarihi yaklaşan ortak işler)
+- erisimKodu => (Tarihi yaklaşan ortak işler)
 
 **/alacaklar/ekle/**
 - erisimKodu, isId, miktar, aciklama, tarih, isTuru(0 = Bireysel, 1 = Ortak) => durum, mesaj;
@@ -257,7 +257,7 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 - erisimKodu, isId => bireyselAlacak, firmaAlacak; 
 
 **/goster/hepsi/**
--erisimKodu => (Tüm veriler.)
+- erisimKodu => (Tüm veriler.)
 
-**/teklif/**
+**/teklif/ (GET)**
 - erisimKodu, bransId, ad, soyad, ustBilgi, altBilgi, sigortaSirketleri, fiyatBilgileri => url;

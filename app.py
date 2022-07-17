@@ -7,7 +7,7 @@ import datetime
 import json
 
 app = flask.Flask(__name__)
-app.config["DEBUG"] = True
+app.config["DEBUG"] = False
 
 DATABASE = 'sigorta.db'
 
@@ -1900,4 +1900,4 @@ def page_not_found(e):
     veriler["mesaj"] = "Yol bulunamadi!"
     return veriler
 
-app.run()
+app.run(host="0.0.0.0", port="5000")
