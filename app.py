@@ -1410,7 +1410,18 @@ def isBireyselYaklasan():
         yetki = yetkiKontrol(kid, "bireyselIslerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""SELECT * FROM islerBireysel""")
+            im.execute("""SELECT
+            islerBireysel.*,
+            musteriler.ad AS "musteriAdi",
+            branslar.ad AS "bransAdi",
+            sigortaSirketleri.ad AS "sigortaSirketiAdi",
+            arsivKlasorleri.ad AS "arsivKlasoruAdi"
+            FROM
+            islerBireysel
+            INNER JOIN musteriler ON islerBireysel.musteriId = musteriler.id
+            INNER JOIN branslar ON islerBireysel.bransId = branslar.id
+            INNER JOIN sigortaSirketleri ON islerBireysel.sigortaSirketiId = sigortaSirketleri.id
+            INNER JOIN arsivKlasorleri ON islerBireysel.arsivId = arsivKlasorleri.id""")
             isler = im.fetchall()
             if(isler):
                 j = 0
@@ -1452,7 +1463,20 @@ def isOrtakYaklasan():
         yetki = yetkiKontrol(kid, "ortakIslerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""SELECT * FROM islerOrtak""")
+            im.execute("""SELECT
+islerOrtak.*,
+musteriler.ad AS "musteriAdi",
+branslar.ad AS "bransAdi",
+sigortaSirketleri.ad AS "sigortaSirketiAdi",
+arsivKlasorleri.ad AS "arsivKlasoruAdi",
+firmalar.ad AS "firmaAdi"
+FROM
+islerOrtak
+INNER JOIN musteriler ON islerOrtak.musteriId = musteriler.id
+INNER JOIN branslar ON islerOrtak.bransId = branslar.id
+INNER JOIN sigortaSirketleri ON islerOrtak.sigortaSirketiId = sigortaSirketleri.id
+INNER JOIN arsivKlasorleri ON islerOrtak.arsivId = arsivKlasorleri.id
+INNER JOIN firmalar ON islerOrtak.firmaId = firmalar.id""")
             isler = im.fetchall()
             if(isler):
                 j = 0
