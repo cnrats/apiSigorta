@@ -7,7 +7,7 @@ import datetime
 import json
 
 app = flask.Flask(__name__)
-app.config["DEBUG"] = False
+app.config["DEBUG"] = True
 
 DATABASE = 'sigorta.db'
 
@@ -132,7 +132,7 @@ def kullaniciEkle():
                 get_db().commit()
                 im.execute("""SELECT id FROM kullanicilar WHERE kullaniciAdi = '%s'"""%(kullaniciAdi))
                 kullaniciId = im.fetchone()
-                im.execute("""INSERT INTO kullaniciYetkileri (kullaniciId, firmalarDuzenle, musterilerDuzenle, arsivKlasorleriDuzenle, branslarDuzenle, sigortaSirketleriDuzenle, bireyselIslerDuzenle, ortakIslerDuzenle, alacaklarDuzenle, verilenlerDuzenle, kullanicilarDuzenle, kayitlarGoruntule) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')"""%(kullaniciId['id'], firmalarDuzenle, musterilerDuzenle, arsivKlasorleriDuzenle, branslarDuzenle, sigortaSirketleriDuzenle, bireyselIslerDuzenle, ortakIslerDuzenle, alacaklarDuzenle, verilenlerDuzenle, kullanicilarDuzenle, kayitlarGoruntule))
+                im.execute("""INSERT INTO kullaniciYetkileri (kullaniciId, firmalarDuzenle, musterilerDuzenle, arsivKlasorleriDuzenle, branslarDuzenle, sigortaSirketleriDuzenle, bireyselIslerDuzenle, ortakIslerDuzenle, alacaklarDuzenle, vereceklerDuzenle, kullanicilarDuzenle, kayitlarGoruntule) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')"""%(kullaniciId['id'], firmalarDuzenle, musterilerDuzenle, arsivKlasorleriDuzenle, branslarDuzenle, sigortaSirketleriDuzenle, bireyselIslerDuzenle, ortakIslerDuzenle, alacaklarDuzenle, verilenlerDuzenle, kullanicilarDuzenle, kayitlarGoruntule))
                 get_db().commit()
                 veriler["durum"] = True
                 veriler["mesaj"] = "Basarili sekilde kullanici eklendi!"
@@ -1432,7 +1432,8 @@ def isBireyselYaklasan():
 
                     tarihIs = datetime.datetime.strptime(tarihVeri, "%Y-%m-%d")
                     delta = tarihIs-tarihSimdi
-                    if(int(delta.days) <= 15 and delta.days > 0):
+                    if(int(delta.days) <= 30 and delta.days >= -30):
+                        veri["kalanGun"] = delta.days
                         bulunanIsler.append(veri)
                         j = j+1
                 if(j == 0):
@@ -1487,7 +1488,77 @@ INNER JOIN firmalar ON islerOrtak.firmaId = firmalar.id""")
 
                     tarihIs = datetime.datetime.strptime(tarihVeri, "%Y-%m-%d")
                     delta = tarihIs-tarihSimdi
-                    if(int(delta.days) <= 15 and delta.days > 0):
+                    if(int(delta.days) <= 30 and delta.days >= -30):
+                        veri["kalanGun"] = delta.days
+                        bulunanIsler.append(veri)
+                        j = j+1
+                if(j == 0):
+                    veriler["durum"] = False
+                    veriler["mesaj"] = "Yaklasan is bulunamadi!"
+                else:
+                    veriler["durum"] = True
+                    veriler["mesaj"] = "Islem basarili!"
+                    veriler["isler"] = bulunanIsler
+            else:
+                veriler["durum"] = False
+                veriler["mesaj"] = "Is bulunamadi!"
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Yaklasan isleri goruntulemek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+    return jsonify(veriler)
+
+@app.route('/is/yaklasan/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
+def isYaklasan():
+    erisimKodu = request.json["erisimKodu"]
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "ortakIslerDuzenle") and yetkiKontrol(kid, "bireyselIslerDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("""SELECT
+            islerOrtak.*,
+            musteriler.ad AS "musteriAdi",
+            branslar.ad AS "bransAdi",
+            sigortaSirketleri.ad AS "sigortaSirketiAdi",
+            arsivKlasorleri.ad AS "arsivKlasoruAdi",
+            firmalar.ad AS "firmaAdi"
+            FROM
+            islerOrtak
+            INNER JOIN musteriler ON islerOrtak.musteriId = musteriler.id
+            INNER JOIN branslar ON islerOrtak.bransId = branslar.id
+            INNER JOIN sigortaSirketleri ON islerOrtak.sigortaSirketiId = sigortaSirketleri.id
+            INNER JOIN arsivKlasorleri ON islerOrtak.arsivId = arsivKlasorleri.id
+            INNER JOIN firmalar ON islerOrtak.firmaId = firmalar.id""")
+            isler = im.fetchall()
+            im.execute("""SELECT
+            islerBireysel.*,
+            musteriler.ad AS "musteriAdi",
+            branslar.ad AS "bransAdi",
+            sigortaSirketleri.ad AS "sigortaSirketiAdi",
+            arsivKlasorleri.ad AS "arsivKlasoruAdi"
+            FROM
+            islerBireysel
+            INNER JOIN musteriler ON islerBireysel.musteriId = musteriler.id
+            INNER JOIN branslar ON islerBireysel.bransId = branslar.id
+            INNER JOIN sigortaSirketleri ON islerBireysel.sigortaSirketiId = sigortaSirketleri.id
+            INNER JOIN arsivKlasorleri ON islerBireysel.arsivId = arsivKlasorleri.id""")
+            isler += (im.fetchall())
+            if(isler):
+                j = 0
+                bulunanIsler = []
+                for veri in isler:
+                    tarihSimdi = datetime.datetime.now()
+                    tarihVeri = veri["policeBitisTarihi"]
+
+                    tarihIs = datetime.datetime.strptime(tarihVeri, "%Y-%m-%d")
+                    delta = tarihIs-tarihSimdi
+                    if(int(delta.days) <= 30 and delta.days >= -30):
+                        veri["kalanGun"] = delta.days
                         bulunanIsler.append(veri)
                         j = j+1
                 if(j == 0):

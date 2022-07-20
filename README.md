@@ -221,10 +221,13 @@ Temel amaç herhangi bir sigorta ofisinin tüm kayıtlarını sistem üzerinde t
 - erisimKodu, isId => durum, mesaj;
 
 **/isler/bireysel/yaklasan/**
--erisimKodu => (Tarihi yaklaşan bireysel işler)
+-erisimKodu => (Tarihi yaklaşan bireysel işler + kalanGun)
 
 **/isler/ortak/yaklasan/**
-- erisimKodu => (Tarihi yaklaşan ortak işler)
+- erisimKodu => (Tarihi yaklaşan ortak işler + kalanGun)
+
+**/isler/yaklasan/**
+- erisimKodu => (Tarihi yaklaşan tüm işler + kalanGun)
 
 **/alacaklar/ekle/**
 - erisimKodu, isId, miktar, aciklama, tarih, isTuru(0 = Bireysel, 1 = Ortak) => durum, mesaj;
