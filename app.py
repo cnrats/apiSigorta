@@ -791,7 +791,7 @@ def musteriGosterHepsi():
         yetki = yetkiKontrol(kid, "musterilerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""SELECT id, ad, soyad, telefon, tc FROM musteriler""")
+            im.execute("""SELECT id, ad, soyad, telefon, mailAdresi, tc FROM musteriler""")
             veriler = im.fetchall()
             veri = {}
             veri["durum"] = True
@@ -978,6 +978,7 @@ def isBireyselMusteriGosterHepsi():
             im.execute("""SELECT
 islerBireysel.*,
 musteriler.ad AS "musteriAdi",
+musteriler.soyad AS "musteriSoyadi",
 branslar.ad AS "bransAdi",
 sigortaSirketleri.ad AS "sigortaSirketiAdi",
 arsivKlasorleri.ad AS "arsivKlasoruAdi"
