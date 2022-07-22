@@ -1691,6 +1691,71 @@ def alacaklarSil():
         veriler["mesaj"] = "Oturum gecersiz!"
     return jsonify(veriler)
 
+@app.route('/borclular/', methods = ["POST"])
+@cross_origin(supports_credentials = True)
+def alacaklarGosterHepsi():
+    erisimKodu = request.json["erisimKodu"]
+    kid = oturumKontrol(erisimKodu)
+    veriler = {}
+    if(kid):
+        yetki = yetkiKontrol(kid, "alacaklarDuzenle")
+        if(yetki):
+            im = get_db().cursor()
+            im.execute("SELECT * FROM alacaklar")
+            alacaklar = im.fetchall()
+            musteriBorclar = []
+            senkron = -1
+            for veri in alacaklar:
+                isBilgi = False
+                musteriBorc = {}
+                if(veri["isTuru"] == 0):
+                    im.execute("""SELECT * FROM islerBireysel WHERE id = %s"""%(veri["isId"]))
+                    isBilgi = im.fetchone()
+                    senkron = 0
+                else:
+                    im.execute("""SELECT * FROM islerOrtak WHERE id = %s"""%(veri["isId"]))
+                    isBilgi = im.fetchone()
+                    senkron = 1
+                if(isBilgi):
+                    im.execute("""SELECT * FROM musteriler WHERE id = %s"""%(isBilgi["musteriId"]))
+                    musteriBilgi = im.fetchone()
+                    bulunan = -1
+                    for x in range(len(musteriBorclar)):
+                        if(musteriBorclar[x]["ad"] == musteriBilgi["ad"] + " " + musteriBilgi["soyad"]):
+                            bulunan = x
+                            break
+                    if(bulunan != -1):
+                        musteriBorclar[x]["borc"] += veri["miktar"]
+                        if((senkron == 0 and veri["isTuru"] == 1) or (senkron == 1 and veri["isTuru"] == 0)):
+                            print("sa")
+                            im.execute("""SELECT * FROM verecekler WHERE isId = %s"""%(senkron))
+                            verecekler = im.fetchall()
+                            for verecek in verecekler:
+                                musteriBorc["borc"] -= verecek["miktar"]
+                            senkron = 2
+                    else:
+                        musteriBorc["musteriId"] = musteriBilgi["id"]
+                        musteriBorc["ad"] = musteriBilgi["ad"] + " " + musteriBilgi["soyad"]
+                        musteriBorc["telefon"] = musteriBilgi["telefon"]
+                        musteriBorc["tc"] = musteriBilgi["tc"]
+                        musteriBorc["borc"] = veri["miktar"]
+                        im.execute("""SELECT * FROM verecekler WHERE isId = %s"""%(isBilgi["id"]))
+                        verecekler = im.fetchall()
+                        for verecek in verecekler:
+                            musteriBorc["borc"] -= verecek["miktar"]
+                        musteriBorclar.append(musteriBorc)
+            veriler["durum"] = True
+            veriler["mesaj"] = "Basarili sekilde kayitlar getirildi."
+            veriler["borclular"] = musteriBorclar
+        else:
+            veriler["durum"] = False
+            veriler["mesaj"] = "Alacak goruntulemek icin yetkiniz bulunmuyor!"
+    else:
+        veriler["durum"] = False
+        veriler["mesaj"] = "Oturum gecersiz!"
+
+    return jsonify(veriler)
+
 @app.route('/verecekler/ekle/', methods = ["POST"])
 @cross_origin(supports_credentials = True)
 def vereceklerEkle():
