@@ -7,7 +7,7 @@ import datetime
 import json
 
 app = flask.Flask(__name__)
-app.config["DEBUG"] = True
+app.config["DEBUG"] = False
 
 DATABASE = 'sigorta.db'
 
@@ -914,7 +914,7 @@ def isBireyselEkle():
         yetki = yetkiKontrol(kid, "bireyselIslerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""INSERT INTO islerBireysel (musteriId, bransId, sigortaSirketiId, arsivId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')"""%(musteriId, bransId, sigortaSirketiId, arsivId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi))
+            im.execute("""INSERT INTO isler (musteriId, bransId, sigortaSirketiId, arsivId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi, isTuru) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '0')"""%(musteriId, bransId, sigortaSirketiId, arsivId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi))
             get_db().commit()
             veriler["durum"] = True
             veriler["mesaj"] = "Basarili sekilde is eklendi!"
@@ -938,17 +938,18 @@ def isBireyselGosterHepsi():
         if(yetki):
             im = get_db().cursor()
             im.execute("""SELECT
-            islerBireysel.*,
+            isler.*,
             musteriler.ad AS "musteriAdi",
             branslar.ad AS "bransAdi",
             sigortaSirketleri.ad AS "sigortaSirketiAdi",
             arsivKlasorleri.ad AS "arsivKlasoruAdi"
             FROM
-            islerBireysel
-            INNER JOIN musteriler ON islerBireysel.musteriId = musteriler.id
-            INNER JOIN branslar ON islerBireysel.bransId = branslar.id
-            INNER JOIN sigortaSirketleri ON islerBireysel.sigortaSirketiId = sigortaSirketleri.id
-            INNER JOIN arsivKlasorleri ON islerBireysel.arsivId = arsivKlasorleri.id""")
+            isler
+            INNER JOIN musteriler ON isler.musteriId = musteriler.id
+            INNER JOIN branslar ON isler.bransId = branslar.id
+            INNER JOIN sigortaSirketleri ON isler.sigortaSirketiId = sigortaSirketleri.id
+            INNER JOIN arsivKlasorleri ON isler.arsivId = arsivKlasorleri.id
+            WHERE isTuru = '0'""")
             veriler = im.fetchall()
             veri = {}
             veri["durum"] = True
@@ -976,18 +977,18 @@ def isBireyselMusteriGosterHepsi():
         if(yetki):
             im = get_db().cursor()
             im.execute("""SELECT
-islerBireysel.*,
+isler.*,
 musteriler.ad AS "musteriAdi",
 musteriler.soyad AS "musteriSoyadi",
 branslar.ad AS "bransAdi",
 sigortaSirketleri.ad AS "sigortaSirketiAdi",
 arsivKlasorleri.ad AS "arsivKlasoruAdi"
 FROM
-islerBireysel
-INNER JOIN musteriler ON islerBireysel.musteriId = musteriler.id
-INNER JOIN branslar ON islerBireysel.bransId = branslar.id
-INNER JOIN sigortaSirketleri ON islerBireysel.sigortaSirketiId = sigortaSirketleri.id
-INNER JOIN arsivKlasorleri ON islerBireysel.arsivId = arsivKlasorleri.id WHERE islerBireysel.musteriId = '%s'"""%(musteriId))
+isler
+INNER JOIN musteriler ON isler.musteriId = musteriler.id
+INNER JOIN branslar ON isler.bransId = branslar.id
+INNER JOIN sigortaSirketleri ON isler.sigortaSirketiId = sigortaSirketleri.id
+INNER JOIN arsivKlasorleri ON isler.arsivId = arsivKlasorleri.id WHERE isler.musteriId = '%s'"""%(musteriId))
             veriler = im.fetchall()
             veri = {}
             veri["durum"] = True
@@ -1016,30 +1017,31 @@ def isBireyselArsivGosterHepsi():
             im = get_db().cursor()
             if(arsivId == 0):
                 im.execute("""SELECT
-islerBireysel.*,
+isler.*,
 musteriler.ad AS "musteriAdi",
 branslar.ad AS "bransAdi",
 sigortaSirketleri.ad AS "sigortaSirketiAdi",
 arsivKlasorleri.ad AS "arsivKlasoruAdi"
 FROM
-islerBireysel
-INNER JOIN musteriler ON islerBireysel.musteriId = musteriler.id
-INNER JOIN branslar ON islerBireysel.bransId = branslar.id
-INNER JOIN sigortaSirketleri ON islerBireysel.sigortaSirketiId = sigortaSirketleri.id
-INNER JOIN arsivKlasorleri ON islerBireysel.arsivId = arsivKlasorleri.id""")
+isler
+INNER JOIN musteriler ON isler.musteriId = musteriler.id
+INNER JOIN branslar ON isler.bransId = branslar.id
+INNER JOIN sigortaSirketleri ON isler.sigortaSirketiId = sigortaSirketleri.id
+INNER JOIN arsivKlasorleri ON isler.arsivId = arsivKlasorleri.id
+WHERE isTuru = '0'""")
             else:
                 im.execute("""SELECT
-islerBireysel.*,
+isler.*,
 musteriler.ad AS "musteriAdi",
 branslar.ad AS "bransAdi",
 sigortaSirketleri.ad AS "sigortaSirketiAdi",
 arsivKlasorleri.ad AS "arsivKlasoruAdi"
 FROM
-islerBireysel
-INNER JOIN musteriler ON islerBireysel.musteriId = musteriler.id
-INNER JOIN branslar ON islerBireysel.bransId = branslar.id
-INNER JOIN sigortaSirketleri ON islerBireysel.sigortaSirketiId = sigortaSirketleri.id
-INNER JOIN arsivKlasorleri ON islerBireysel.arsivId = arsivKlasorleri.id WHERE arsivId = '%s'"""%(arsivId))
+isler
+INNER JOIN musteriler ON isler.musteriId = musteriler.id
+INNER JOIN branslar ON isler.bransId = branslar.id
+INNER JOIN sigortaSirketleri ON isler.sigortaSirketiId = sigortaSirketleri.id
+INNER JOIN arsivKlasorleri ON isler.arsivId = arsivKlasorleri.id WHERE arsivId = '%s' AND isTuru = '0'"""%(arsivId))
             
             veriler = im.fetchall()
             veri = {}
@@ -1076,12 +1078,12 @@ def isBireyselGuncelle():
         yetki = yetkiKontrol(kid, "bireyselIslerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""SELECT * FROM islerBireysel WHERE id = '%s'"""%(isId))
+            im.execute("""SELECT * FROM isler WHERE id = '%s' AND isTuru = '0'"""%(isId))
             if(not im.fetchone()):
                 veriler["durum"] = False
                 veriler["mesaj"] = "Is bulunamadi!"
             else:
-                im.execute("""UPDATE islerBireysel SET musteriId = '%s', bransId = '%s', sigortaSirketiId = '%s', arsivId = '%s', plaka = '%s', ruhsatSeriNo = '%s', policeNo = '%s', policeBitisTarihi = '%s' WHERE id = '%s'"""%(musteriId, bransId, sigortaSirketiId, arsivId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi, isId))
+                im.execute("""UPDATE isler SET musteriId = '%s', bransId = '%s', sigortaSirketiId = '%s', arsivId = '%s', plaka = '%s', ruhsatSeriNo = '%s', policeNo = '%s', policeBitisTarihi = '%s' WHERE id = '%s' AND isTuru = '0'"""%(musteriId, bransId, sigortaSirketiId, arsivId, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi, isId))
                 get_db().commit()
                 veriler["durum"] = True
                 veriler["mesaj"] = "Basarili sekilde is guncellendi!"
@@ -1105,12 +1107,12 @@ def isBireyselSil():
         yetki = yetkiKontrol(kid, "bireyselIslerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""SELECT * FROM islerBireysel WHERE id = '%s'"""%(isId))
+            im.execute("""SELECT * FROM isler WHERE id = '%s' AND isTuru = '0'"""%(isId))
             if(not im.fetchone()):
                 veriler["durum"] = False
                 veriler["mesaj"] = "Is bulunamadi!"
             else:
-                im.execute("""DELETE FROM islerBireysel WHERE id = '%s'"""%(isId))
+                im.execute("""DELETE FROM isler WHERE id = '%s' AND isTuru = '0'"""%(isId))
                 get_db().commit()
                 veriler["durum"] = True
                 veriler["mesaj"] = "Basarili sekilde is silindi!"
@@ -1144,7 +1146,7 @@ def isOrtakEkle():
         yetki = yetkiKontrol(kid, "ortakIslerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""INSERT INTO islerOrtak (musteriId, bransId, sigortaSirketiId, arsivId, firmaId, komisyonOraniKendisi, komisyonOraniFirma, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')"""%(musteriId, bransId, sigortaSirketiId, arsivId, firmaId, komisyonOraniKendisi, komisyonOraniFirma, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi))
+            im.execute("""INSERT INTO isler (musteriId, bransId, sigortaSirketiId, arsivId, firmaId, komisyonOraniKendisi, komisyonOraniFirma, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi, isTuru) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')"""%(musteriId, bransId, sigortaSirketiId, arsivId, firmaId, komisyonOraniKendisi, komisyonOraniFirma, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi, 1))
             get_db().commit()
             veriler["durum"] = True
             veriler["mesaj"] = "Basarili sekilde is eklendi!"
@@ -1168,19 +1170,20 @@ def isOrtakGosterHepsi():
         if(yetki):
             im = get_db().cursor()
             im.execute("""SELECT
-islerOrtak.*,
+isler.*,
 musteriler.ad AS "musteriAdi",
 branslar.ad AS "bransAdi",
 sigortaSirketleri.ad AS "sigortaSirketiAdi",
 arsivKlasorleri.ad AS "arsivKlasoruAdi",
 firmalar.ad AS "firmaAdi"
 FROM
-islerOrtak
-INNER JOIN musteriler ON islerOrtak.musteriId = musteriler.id
-INNER JOIN branslar ON islerOrtak.bransId = branslar.id
-INNER JOIN sigortaSirketleri ON islerOrtak.sigortaSirketiId = sigortaSirketleri.id
-INNER JOIN arsivKlasorleri ON islerOrtak.arsivId = arsivKlasorleri.id
-INNER JOIN firmalar ON islerOrtak.firmaId = firmalar.id""")
+isler
+INNER JOIN musteriler ON isler.musteriId = musteriler.id
+INNER JOIN branslar ON isler.bransId = branslar.id
+INNER JOIN sigortaSirketleri ON isler.sigortaSirketiId = sigortaSirketleri.id
+INNER JOIN arsivKlasorleri ON isler.arsivId = arsivKlasorleri.id
+INNER JOIN firmalar ON isler.firmaId = firmalar.id
+WHERE isTuru = '1'""")
             veriler = im.fetchall()
             veri = {}
             veri["durum"] = True
@@ -1208,19 +1211,19 @@ def isOrtakMusteriGosterHepsi():
         if(yetki):
             im = get_db().cursor()
             im.execute("""SELECT
-islerOrtak.*,
+isler.*,
 musteriler.ad AS "musteriAdi",
 branslar.ad AS "bransAdi",
 sigortaSirketleri.ad AS "sigortaSirketiAdi",
 arsivKlasorleri.ad AS "arsivKlasoruAdi",
 firmalar.ad AS "firmaAdi"
 FROM
-islerOrtak
-INNER JOIN musteriler ON islerOrtak.musteriId = musteriler.id
-INNER JOIN branslar ON islerOrtak.bransId = branslar.id
-INNER JOIN sigortaSirketleri ON islerOrtak.sigortaSirketiId = sigortaSirketleri.id
-INNER JOIN arsivKlasorleri ON islerOrtak.arsivId = arsivKlasorleri.id
-INNER JOIN firmalar ON islerOrtak.firmaId = firmalar.id WHERE musteriId = '%s'"""%(musteriId))
+isler
+INNER JOIN musteriler ON isler.musteriId = musteriler.id
+INNER JOIN branslar ON isler.bransId = branslar.id
+INNER JOIN sigortaSirketleri ON isler.sigortaSirketiId = sigortaSirketleri.id
+INNER JOIN arsivKlasorleri ON isler.arsivId = arsivKlasorleri.id
+INNER JOIN firmalar ON isler.firmaId = firmalar.id WHERE musteriId = '%s' AND isTuru = '1'"""%(musteriId))
             veriler = im.fetchall()
             veri = {}
             veri["durum"] = True
@@ -1249,34 +1252,35 @@ def isOrtakArsivGosterHepsi():
             im = get_db().cursor()
             if(arsivId == 0):
                 im.execute("""SELECT
-islerOrtak.*,
+isler.*,
 musteriler.ad AS "musteriAdi",
 branslar.ad AS "bransAdi",
 sigortaSirketleri.ad AS "sigortaSirketiAdi",
 arsivKlasorleri.ad AS "arsivKlasoruAdi",
 firmalar.ad AS "firmaAdi"
 FROM
-islerOrtak
-INNER JOIN musteriler ON islerOrtak.musteriId = musteriler.id
-INNER JOIN branslar ON islerOrtak.bransId = branslar.id
-INNER JOIN sigortaSirketleri ON islerOrtak.sigortaSirketiId = sigortaSirketleri.id
-INNER JOIN arsivKlasorleri ON islerOrtak.arsivId = arsivKlasorleri.id
-INNER JOIN firmalar ON islerOrtak.firmaId = firmalar.id""")
+isler
+INNER JOIN musteriler ON isler.musteriId = musteriler.id
+INNER JOIN branslar ON isler.bransId = branslar.id
+INNER JOIN sigortaSirketleri ON isler.sigortaSirketiId = sigortaSirketleri.id
+INNER JOIN arsivKlasorleri ON isler.arsivId = arsivKlasorleri.id
+INNER JOIN firmalar ON isler.firmaId = firmalar.id
+WHERE isTuru = '1'""")
             else:
                 im.execute("""SELECT
-islerOrtak.*,
+isler.*,
 musteriler.ad AS "musteriAdi",
 branslar.ad AS "bransAdi",
 sigortaSirketleri.ad AS "sigortaSirketiAdi",
 arsivKlasorleri.ad AS "arsivKlasoruAdi",
 firmalar.ad AS "firmaAdi"
 FROM
-islerOrtak
-INNER JOIN musteriler ON islerOrtak.musteriId = musteriler.id
-INNER JOIN branslar ON islerOrtak.bransId = branslar.id
-INNER JOIN sigortaSirketleri ON islerOrtak.sigortaSirketiId = sigortaSirketleri.id
-INNER JOIN arsivKlasorleri ON islerOrtak.arsivId = arsivKlasorleri.id
-INNER JOIN firmalar ON islerOrtak.firmaId = firmalar.id WHERE arsivId = '%s'"""%(arsivId))
+isler
+INNER JOIN musteriler ON isler.musteriId = musteriler.id
+INNER JOIN branslar ON isler.bransId = branslar.id
+INNER JOIN sigortaSirketleri ON isler.sigortaSirketiId = sigortaSirketleri.id
+INNER JOIN arsivKlasorleri ON isler.arsivId = arsivKlasorleri.id
+INNER JOIN firmalar ON isler.firmaId = firmalar.id WHERE arsivId = '%s' AND isTuru = '1'"""%(arsivId))
             veriler = im.fetchall()
             veri = {}
             veri["durum"] = True
@@ -1305,19 +1309,19 @@ def isOrtakFirmaGosterHepsi():
         if(yetki):
             im = get_db().cursor()
             im.execute("""SELECT
-islerOrtak.*,
+isler.*,
 musteriler.ad AS "musteriAdi",
 branslar.ad AS "bransAdi",
 sigortaSirketleri.ad AS "sigortaSirketiAdi",
 arsivKlasorleri.ad AS "arsivKlasoruAdi",
 firmalar.ad AS "firmaAdi"
 FROM
-islerOrtak
-INNER JOIN musteriler ON islerOrtak.musteriId = musteriler.id
-INNER JOIN branslar ON islerOrtak.bransId = branslar.id
-INNER JOIN sigortaSirketleri ON islerOrtak.sigortaSirketiId = sigortaSirketleri.id
-INNER JOIN arsivKlasorleri ON islerOrtak.arsivId = arsivKlasorleri.id
-INNER JOIN firmalar ON islerOrtak.firmaId = firmalar.id WHERE firmaId = '%s'"""%(firmaId))
+isler
+INNER JOIN musteriler ON isler.musteriId = musteriler.id
+INNER JOIN branslar ON isler.bransId = branslar.id
+INNER JOIN sigortaSirketleri ON isler.sigortaSirketiId = sigortaSirketleri.id
+INNER JOIN arsivKlasorleri ON isler.arsivId = arsivKlasorleri.id
+INNER JOIN firmalar ON isler.firmaId = firmalar.id WHERE firmaId = '%s' AND isTuru = '1'"""%(firmaId))
             veriler = im.fetchall()
             veri = {}
             veri["durum"] = True
@@ -1355,12 +1359,12 @@ def isOrtakGuncelle():
         yetki = yetkiKontrol(kid, "bireyselIslerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""SELECT * FROM islerOrtak WHERE id = '%s'"""%(isId))
+            im.execute("""SELECT * FROM isler WHERE id = '%s' AND isTuru = '1'"""%(isId))
             if(not im.fetchone()):
                 veriler["durum"] = False
                 veriler["mesaj"] = "Is bulunamadi!"
             else:
-                im.execute("""UPDATE islerOrtak SET musteriId = '%s', bransId = '%s', sigortaSirketiId = '%s', arsivId = '%s', firmaId = '%s', komisyonOraniKendisi = '%s', komisyonOraniFirma = '%s', plaka = '%s', ruhsatSeriNo = '%s', policeNo = '%s', policeBitisTarihi = '%s' WHERE id = '%s'"""%(musteriId, bransId, sigortaSirketiId, arsivId, firmaId, komisyonOraniKendisi, komisyonOraniFirma, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi, isId))
+                im.execute("""UPDATE isler SET musteriId = '%s', bransId = '%s', sigortaSirketiId = '%s', arsivId = '%s', firmaId = '%s', komisyonOraniKendisi = '%s', komisyonOraniFirma = '%s', plaka = '%s', ruhsatSeriNo = '%s', policeNo = '%s', policeBitisTarihi = '%s' WHERE id = '%s' AND isTuru = '1'"""%(musteriId, bransId, sigortaSirketiId, arsivId, firmaId, komisyonOraniKendisi, komisyonOraniFirma, plaka, ruhsatSeriNo, policeNo, policeBitisTarihi, isId))
                 get_db().commit()
                 veriler["durum"] = True
                 veriler["mesaj"] = "Basarili sekilde is guncellendi!"
@@ -1384,12 +1388,12 @@ def isOrtakSil():
         yetki = yetkiKontrol(kid, "ortakIslerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""SELECT * FROM islerOrtak WHERE id = '%s'"""%(isId))
+            im.execute("""SELECT * FROM isler WHERE id = '%s' AND isTuru = '1'"""%(isId))
             if(not im.fetchone()):
                 veriler["durum"] = False
                 veriler["mesaj"] = "Is bulunamadi!"
             else:
-                im.execute("""DELETE FROM islerOrtak WHERE id = '%s'"""%(isId))
+                im.execute("""DELETE FROM isler WHERE id = '%s' AND isTuru = '1'"""%(isId))
                 get_db().commit()
                 veriler["durum"] = True
                 veriler["mesaj"] = "Basarili sekilde is silindi!"
@@ -1412,17 +1416,18 @@ def isBireyselYaklasan():
         if(yetki):
             im = get_db().cursor()
             im.execute("""SELECT
-            islerBireysel.*,
+            isler.*,
             musteriler.ad AS "musteriAdi",
             branslar.ad AS "bransAdi",
             sigortaSirketleri.ad AS "sigortaSirketiAdi",
             arsivKlasorleri.ad AS "arsivKlasoruAdi"
             FROM
-            islerBireysel
-            INNER JOIN musteriler ON islerBireysel.musteriId = musteriler.id
-            INNER JOIN branslar ON islerBireysel.bransId = branslar.id
-            INNER JOIN sigortaSirketleri ON islerBireysel.sigortaSirketiId = sigortaSirketleri.id
-            INNER JOIN arsivKlasorleri ON islerBireysel.arsivId = arsivKlasorleri.id""")
+            isler
+            INNER JOIN musteriler ON isler.musteriId = musteriler.id
+            INNER JOIN branslar ON isler.bransId = branslar.id
+            INNER JOIN sigortaSirketleri ON isler.sigortaSirketiId = sigortaSirketleri.id
+            INNER JOIN arsivKlasorleri ON isler.arsivId = arsivKlasorleri.id
+            WHERE isTuru = '0'""")
             isler = im.fetchall()
             if(isler):
                 j = 0
@@ -1466,19 +1471,20 @@ def isOrtakYaklasan():
         if(yetki):
             im = get_db().cursor()
             im.execute("""SELECT
-islerOrtak.*,
+isler.*,
 musteriler.ad AS "musteriAdi",
 branslar.ad AS "bransAdi",
 sigortaSirketleri.ad AS "sigortaSirketiAdi",
 arsivKlasorleri.ad AS "arsivKlasoruAdi",
 firmalar.ad AS "firmaAdi"
 FROM
-islerOrtak
-INNER JOIN musteriler ON islerOrtak.musteriId = musteriler.id
-INNER JOIN branslar ON islerOrtak.bransId = branslar.id
-INNER JOIN sigortaSirketleri ON islerOrtak.sigortaSirketiId = sigortaSirketleri.id
-INNER JOIN arsivKlasorleri ON islerOrtak.arsivId = arsivKlasorleri.id
-INNER JOIN firmalar ON islerOrtak.firmaId = firmalar.id""")
+isler
+INNER JOIN musteriler ON isler.musteriId = musteriler.id
+INNER JOIN branslar ON isler.bransId = branslar.id
+INNER JOIN sigortaSirketleri ON isler.sigortaSirketiId = sigortaSirketleri.id
+INNER JOIN arsivKlasorleri ON isler.arsivId = arsivKlasorleri.id
+INNER JOIN firmalar ON isler.firmaId = firmalar.id
+WHERE isTuru = '1'""")
             isler = im.fetchall()
             if(isler):
                 j = 0
@@ -1522,32 +1528,34 @@ def isYaklasan():
         if(yetki):
             im = get_db().cursor()
             im.execute("""SELECT
-            islerOrtak.*,
+            isler.*,
             musteriler.ad AS "musteriAdi",
             branslar.ad AS "bransAdi",
             sigortaSirketleri.ad AS "sigortaSirketiAdi",
             arsivKlasorleri.ad AS "arsivKlasoruAdi",
             firmalar.ad AS "firmaAdi"
             FROM
-            islerOrtak
-            INNER JOIN musteriler ON islerOrtak.musteriId = musteriler.id
-            INNER JOIN branslar ON islerOrtak.bransId = branslar.id
-            INNER JOIN sigortaSirketleri ON islerOrtak.sigortaSirketiId = sigortaSirketleri.id
-            INNER JOIN arsivKlasorleri ON islerOrtak.arsivId = arsivKlasorleri.id
-            INNER JOIN firmalar ON islerOrtak.firmaId = firmalar.id""")
+            isler
+            INNER JOIN musteriler ON isler.musteriId = musteriler.id
+            INNER JOIN branslar ON isler.bransId = branslar.id
+            INNER JOIN sigortaSirketleri ON isler.sigortaSirketiId = sigortaSirketleri.id
+            INNER JOIN arsivKlasorleri ON isler.arsivId = arsivKlasorleri.id
+            INNER JOIN firmalar ON isler.firmaId = firmalar.id
+            WHERE isTuru = '1'""")
             isler = im.fetchall()
             im.execute("""SELECT
-            islerBireysel.*,
+            isler.*,
             musteriler.ad AS "musteriAdi",
             branslar.ad AS "bransAdi",
             sigortaSirketleri.ad AS "sigortaSirketiAdi",
             arsivKlasorleri.ad AS "arsivKlasoruAdi"
             FROM
-            islerBireysel
-            INNER JOIN musteriler ON islerBireysel.musteriId = musteriler.id
-            INNER JOIN branslar ON islerBireysel.bransId = branslar.id
-            INNER JOIN sigortaSirketleri ON islerBireysel.sigortaSirketiId = sigortaSirketleri.id
-            INNER JOIN arsivKlasorleri ON islerBireysel.arsivId = arsivKlasorleri.id""")
+            isler
+            INNER JOIN musteriler ON isler.musteriId = musteriler.id
+            INNER JOIN branslar ON isler.bransId = branslar.id
+            INNER JOIN sigortaSirketleri ON isler.sigortaSirketiId = sigortaSirketleri.id
+            INNER JOIN arsivKlasorleri ON isler.arsivId = arsivKlasorleri.id
+            WHERE isTuru = '0'""")
             isler += (im.fetchall())
             if(isler):
                 j = 0
@@ -1596,7 +1604,7 @@ def alacaklarEkle():
         yetki = yetkiKontrol(kid, "alacaklarDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""INSERT INTO alacaklar (isId, miktar, aciklama, tarih, isTuru) VALUES ('%s', '%s', '%s', '%s', '%s')"""%(isId, miktar, aciklama, tarih, isTuru))
+            im.execute("""INSERT INTO alacaklar (isId, miktar, aciklama, tarih) VALUES ('%s', '%s', '%s', '%s')"""%(isId, miktar, aciklama, tarih))
             get_db().commit()
             veriler["durum"] = True
             veriler["mesaj"] = "Basarili sekilde alacak eklendi!"
@@ -1621,7 +1629,7 @@ def alacakGoster():
         yetki = yetkiKontrol(kid, "alacaklarDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""SELECT * FROM alacaklar WHERE isId = '%s' AND isTuru = '%s'"""%(isId, isTuru))
+            im.execute("""SELECT * FROM alacaklar WHERE isId = '%s'"""%(isId))
             veriler = im.fetchall()
             veri = {}
             veri["durum"] = True
@@ -1702,52 +1710,61 @@ def alacaklarGosterHepsi():
         yetki = yetkiKontrol(kid, "alacaklarDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("SELECT * FROM alacaklar")
-            alacaklar = im.fetchall()
-            musteriBorclar = []
-            senkron = -1
-            for veri in alacaklar:
-                isBilgi = False
-                musteriBorc = {}
-                if(veri["isTuru"] == 0):
-                    im.execute("""SELECT * FROM islerBireysel WHERE id = %s"""%(veri["isId"]))
-                    isBilgi = im.fetchone()
-                    senkron = 0
-                else:
-                    im.execute("""SELECT * FROM islerOrtak WHERE id = %s"""%(veri["isId"]))
-                    isBilgi = im.fetchone()
-                    senkron = 1
-                if(isBilgi):
-                    im.execute("""SELECT * FROM musteriler WHERE id = %s"""%(isBilgi["musteriId"]))
-                    musteriBilgi = im.fetchone()
-                    bulunan = -1
-                    for x in range(len(musteriBorclar)):
-                        if(musteriBorclar[x]["ad"] == musteriBilgi["ad"] + " " + musteriBilgi["soyad"]):
-                            bulunan = x
-                            break
-                    if(bulunan != -1):
-                        musteriBorclar[x]["borc"] += veri["miktar"]
-                        if((senkron == 0 and veri["isTuru"] == 1) or (senkron == 1 and veri["isTuru"] == 0)):
-                            print("sa")
-                            im.execute("""SELECT * FROM verecekler WHERE isId = %s"""%(senkron))
-                            verecekler = im.fetchall()
-                            for verecek in verecekler:
-                                musteriBorc["borc"] -= verecek["miktar"]
-                            senkron = 2
-                    else:
-                        musteriBorc["musteriId"] = musteriBilgi["id"]
-                        musteriBorc["ad"] = musteriBilgi["ad"] + " " + musteriBilgi["soyad"]
-                        musteriBorc["telefon"] = musteriBilgi["telefon"]
-                        musteriBorc["tc"] = musteriBilgi["tc"]
-                        musteriBorc["borc"] = veri["miktar"]
-                        im.execute("""SELECT * FROM verecekler WHERE isId = %s"""%(isBilgi["id"]))
-                        verecekler = im.fetchall()
-                        for verecek in verecekler:
-                            musteriBorc["borc"] -= verecek["miktar"]
-                        musteriBorclar.append(musteriBorc)
+            borclular = []
+            im.execute("""SELECT
+            id AS 'musteriId',
+            ad || ' ' || soyad AS 'ad',
+            tc,
+            telefon
+            FROM musteriler""")
+            musteriler = im.fetchall()
+
+            for musteri in musteriler:
+                borc = 0
+                im.execute("""SELECT
+                SUM(alacaklar.miktar) AS toplam
+
+                FROM musteriler
+
+                INNER JOIN isler
+                ON musteriler.id = isler.musteriId
+                INNER JOIN alacaklar
+                ON isler.id = alacaklar.isId
+
+                WHERE
+                musteriId = '%s'
+                """%(musteri["musteriId"]))
+                
+                alacakToplam = im.fetchone()["toplam"]
+
+                if(alacakToplam):
+                    borc += alacakToplam
+
+                im.execute("""SELECT
+                SUM(verecekler.miktar) AS toplam
+
+                FROM musteriler
+
+                INNER JOIN isler
+                ON musteriler.id = isler.musteriId
+                INNER JOIN verecekler
+                ON isler.id = verecekler.isId
+
+                WHERE
+                musteriId = '%s'
+                """%(musteri["musteriId"]))
+                
+                verecekToplam = im.fetchone()["toplam"]
+
+                if(verecekToplam):
+                    borc -= verecekToplam
+
+                musteri["borc"] = borc
+                borclular.append(musteri)
+
+            veriler["borclular"] = borclular
             veriler["durum"] = True
             veriler["mesaj"] = "Basarili sekilde kayitlar getirildi."
-            veriler["borclular"] = musteriBorclar
         else:
             veriler["durum"] = False
             veriler["mesaj"] = "Alacak goruntulemek icin yetkiniz bulunmuyor!"
@@ -1773,7 +1790,7 @@ def vereceklerEkle():
         yetki = yetkiKontrol(kid, "vereceklerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""INSERT INTO verecekler (isId, miktar, aciklama, tarih, isTuru) VALUES ('%s', '%s', '%s', '%s', '%s')"""%(isId, miktar, aciklama, tarih, isTuru))
+            im.execute("""INSERT INTO verecekler (isId, miktar, aciklama, tarih) VALUES ('%s', '%s', '%s', '%s')"""%(isId, miktar, aciklama, tarih))
             get_db().commit()
             veriler["durum"] = True
             veriler["mesaj"] = "Basarili sekilde verecek eklendi!"
@@ -1798,7 +1815,7 @@ def vereceklerGoster():
         yetki = yetkiKontrol(kid, "vereceklerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""SELECT * FROM verecekler WHERE isId = '%s' AND isTuru = '%s'"""%(isId, isTuru))
+            im.execute("""SELECT * FROM verecekler WHERE isId = '%s'"""%(isId))
             veriler = im.fetchall()
             veri = {}
             veri["durum"] = True
@@ -1882,10 +1899,10 @@ def borc():
         yetki = yetkiKontrol(kid, "vereceklerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""SELECT miktar FROM alacaklar WHERE isId = '%s' AND isTuru = '%s'"""%(isId, isTuru))
+            im.execute("""SELECT miktar FROM alacaklar WHERE isId = '%s'"""%(isId))
             alacaklar = im.fetchall()
 
-            im.execute("""SELECT miktar FROM verecekler WHERE isId = '%s' AND isTuru = '%s'"""%(isId, isTuru))
+            im.execute("""SELECT miktar FROM verecekler WHERE isId = '%s'"""%(isId))
             verecekler = im.fetchall()
 
             toplam = 0
@@ -1926,7 +1943,7 @@ def pay():
                 toplam += int(veri["miktar"])
 
             im = get_db().cursor()
-            im.execute("""SELECT komisyonOraniFirma, komisyonOraniKendisi FROM islerOrtak WHERE id = '%s'"""%(isId))
+            im.execute("""SELECT komisyonOraniFirma, komisyonOraniKendisi FROM isler WHERE id = '%s' AND isTuru = '1'"""%(isId))
             oranlar = im.fetchone()
 
             bireyselAlacak = (toplam / 100) * int(oranlar["komisyonOraniKendisi"])
@@ -1969,10 +1986,10 @@ def gosterHepsi():
             im.execute("SELECT * FROM firmalar")
             firmalar = im.fetchall()
 
-            im.execute("SELECT * FROM islerBireysel")
+            im.execute("SELECT * FROM isler WHERE isTuru = '0'")
             islerBireysel = im.fetchall()
 
-            im.execute("SELECT * FROM islerOrtak")
+            im.execute("SELECT * FROM isler WHERE isTuru = '1'")
             islerOrtak = im.fetchall()
 
             im.execute("SELECT * FROM kullaniciYetkileri")
