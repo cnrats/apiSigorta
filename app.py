@@ -2044,7 +2044,6 @@ def teklif():
     ad = data["ad"]
     soyad = data["soyad"]
     ustBilgi = data["ustBilgi"]
-    altBilgi = data["altBilgi"]
     sigortaSirketleri = data["sigortaSirketleri"]
     fiyatBilgileri = data["fiyatBilgileri"]
 
@@ -2066,7 +2065,7 @@ def teklif():
                 enDusukFiyat = sirketBilgileri[j]["fiyat"]
             j += 1
 
-        return render_template("index.html", bransBilgileri = bransBilgileri, ad = ad, soyad = soyad, ustBilgi = ustBilgi, altBilgi = altBilgi, sirketBilgileri = sirketBilgileri, enDusukFiyat = enDusukFiyat)
+        return render_template("index.html", bransBilgileri = bransBilgileri, ad = ad, soyad = soyad, ustBilgi = ustBilgi, sirketBilgileri = sirketBilgileri, enDusukFiyat = enDusukFiyat)
     else:
         veriler["durum"] = False
         veriler["mesaj"] = "Oturum gecersiz!"
