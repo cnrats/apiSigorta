@@ -5,6 +5,7 @@ import sqlite3
 import uuid
 import datetime
 import json
+import shutil
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = False
@@ -43,6 +44,7 @@ def yetkiKontrol(kullaniciId, yetki):
 
 @app.before_first_request
 def oturumlariBosalt():
+    shutil.copy("./sigorta.db", "./yedekler/" + str(datetime.datetime.now()) + ".db")
     with app.app_context():
         im = get_db().cursor()
         im.execute("SELECT * FROM oturumlar")
