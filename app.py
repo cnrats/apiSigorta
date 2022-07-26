@@ -9,7 +9,7 @@ import shutil
 import os
 
 app = flask.Flask(__name__)
-app.config["DEBUG"] = True
+app.config["DEBUG"] = False
 
 DATABASE = 'sigorta.db'
 
