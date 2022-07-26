@@ -6,9 +6,10 @@ import uuid
 import datetime
 import json
 import shutil
+import os
 
 app = flask.Flask(__name__)
-app.config["DEBUG"] = False
+app.config["DEBUG"] = True
 
 DATABASE = 'sigorta.db'
 
@@ -43,8 +44,22 @@ def yetkiKontrol(kullaniciId, yetki):
     return False
 
 @app.before_first_request
-def oturumlariBosalt():
-    shutil.copy("./sigorta.db", "./yedekler/" + str(datetime.datetime.now()) + ".db")
+def baslangicGorevleri():
+    for file in os.listdir("./yedekler"):
+        if file.endswith(".db"):
+            yedekTarih = False
+            try:
+                yedekTarih = datetime.datetime.strptime(file[:-3], "%d-%m-%Y-%H-%M-%S")
+            except:
+                print("Yedekler klasorunde bilinmeyen dosya bulundu!\nDosya kaldiriliyor...")
+                os.remove("./yedekler/"+file)
+            else:
+                suAn = datetime.datetime.now()
+                delta = suAn - yedekTarih
+                if(delta.days > 30):
+                    os.remove("./yedekler/"+file)
+    
+    shutil.copy("./sigorta.db", "./yedekler/" + datetime.datetime.now().strftime("%d-%m-%Y-%H-%M-%S") + ".db")
     with app.app_context():
         im = get_db().cursor()
         im.execute("SELECT * FROM oturumlar")
@@ -1532,6 +1547,7 @@ def isYaklasan():
             im.execute("""SELECT
             isler.*,
             musteriler.ad AS "musteriAdi",
+            musteriler.tc AS "musteriTc",
             branslar.ad AS "bransAdi",
             sigortaSirketleri.ad AS "sigortaSirketiAdi",
             arsivKlasorleri.ad AS "arsivKlasoruAdi",
@@ -1548,6 +1564,7 @@ def isYaklasan():
             im.execute("""SELECT
             isler.*,
             musteriler.ad AS "musteriAdi",
+            musteriler.tc AS "musteriTc",
             branslar.ad AS "bransAdi",
             sigortaSirketleri.ad AS "sigortaSirketiAdi",
             arsivKlasorleri.ad AS "arsivKlasoruAdi"
@@ -1937,7 +1954,7 @@ def pay():
         yetki = yetkiKontrol(kid, "vereceklerDuzenle")
         if(yetki):
             im = get_db().cursor()
-            im.execute("""SELECT miktar FROM alacaklar WHERE isId = '%s' AND isTuru = '%s'"""%(isId, 1))
+            im.execute("""SELECT miktar FROM alacaklar WHERE isId = '%s'"""%(isId))
             alacaklar = im.fetchall()
 
             toplam = 0
@@ -1945,7 +1962,7 @@ def pay():
                 toplam += int(veri["miktar"])
 
             im = get_db().cursor()
-            im.execute("""SELECT komisyonOraniFirma, komisyonOraniKendisi FROM isler WHERE id = '%s' AND isTuru = '1'"""%(isId))
+            im.execute("""SELECT komisyonOraniFirma, komisyonOraniKendisi FROM isler WHERE id = '%s'"""%(isId))
             oranlar = im.fetchone()
 
             bireyselAlacak = (toplam / 100) * int(oranlar["komisyonOraniKendisi"])
