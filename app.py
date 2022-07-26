@@ -1434,7 +1434,7 @@ def isBireyselYaklasan():
             im = get_db().cursor()
             im.execute("""SELECT
             isler.*,
-            musteriler.ad AS "musteriAdi",
+            musteriler.ad || " " || musteriler.soyad AS "musteriAdi",
             branslar.ad AS "bransAdi",
             sigortaSirketleri.ad AS "sigortaSirketiAdi",
             arsivKlasorleri.ad AS "arsivKlasoruAdi"
@@ -1489,7 +1489,7 @@ def isOrtakYaklasan():
             im = get_db().cursor()
             im.execute("""SELECT
 isler.*,
-musteriler.ad AS "musteriAdi",
+musteriler.ad || " " || musteriler.soyad AS "musteriAdi",
 branslar.ad AS "bransAdi",
 sigortaSirketleri.ad AS "sigortaSirketiAdi",
 arsivKlasorleri.ad AS "arsivKlasoruAdi",
@@ -1546,7 +1546,7 @@ def isYaklasan():
             im = get_db().cursor()
             im.execute("""SELECT
             isler.*,
-            musteriler.ad AS "musteriAdi",
+            musteriler.ad || " " || musteriler.soyad AS "musteriAdi",
             musteriler.tc AS "musteriTc",
             branslar.ad AS "bransAdi",
             sigortaSirketleri.ad AS "sigortaSirketiAdi",
@@ -1563,7 +1563,7 @@ def isYaklasan():
             isler = im.fetchall()
             im.execute("""SELECT
             isler.*,
-            musteriler.ad AS "musteriAdi",
+            musteriler.ad || " " || musteriler.soyad AS "musteriAdi",
             musteriler.tc AS "musteriTc",
             branslar.ad AS "bransAdi",
             sigortaSirketleri.ad AS "sigortaSirketiAdi",
